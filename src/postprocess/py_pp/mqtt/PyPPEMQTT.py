@@ -134,7 +134,7 @@ class PyPPEMQTT:
             msg (:obj: MQTTMessage): message sent by the broker
         """
         # A new message is received
-        self.notifier.notify(False, msg.topic, msg.payload)
+        self.notifier.notify(False, msg.topic, msg.payload.decode("utf-8","ignore"))
 
 
     def mySubscribe(self, topic, qos = 2):
