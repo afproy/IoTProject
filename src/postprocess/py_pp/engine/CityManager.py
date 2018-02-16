@@ -18,7 +18,7 @@ class CityManager:
         myCity (:obj: City): the City to manage
     """
 
-    def __init__(self, clientID, nwLat, nwLong, seLat, seLong):
+    def __init__(self, clientID, nwLat, nwLong, seLat, seLong, n, threshold):
         """ Constructor of CityManager:
 
         Initializes the attributes of the class. To do so it creates an instance
