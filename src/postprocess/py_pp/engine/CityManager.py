@@ -26,18 +26,22 @@ class CityManager:
 
         Args:
             clientID (str): of the city to manage
-            nwLat (float): latitude of a point situated in the North West of
+            nwLat (float): latitude of the North West point
+            nwLong (float): longitude of the North West point
+            seLat (float): latitude of the South East point
+            seLong (float): longitude of the South East point
+            n (int): square root of the wanted number of neighborhoods composing
                 the city
-            nwLong (float): longitude of a point situated in the North West of
-                the city
-            seLat (float): latitude of a point situated in the South East of
-                the city
-            seLong (float): longitude of a point situated in the South East of 
-                the city
+            threshold (int): number of users with their umbrella opened in a
+                Neighborhood at which a notification to the users with their
+                umbrella closed need to be sent
         """
         self.clientID = clientID
-        self.myPyPPEMqttClient = PyPPEMQTT(self.clientID, "iot.eclipse.org", 1883, self)
-        self.myCity = City(self.clientID, nwLat, nwLong, seLat, seLong)
+        self.myPyPPEMqttClient = PyPPEMQTT(self.clientID, "iot.eclipse.org", \
+                                           1883, self)
+        self.myCity = City(self.clientID, nwLat, nwLong, seLat, seLong, n, \
+                           threshold)
+
 
     def manage(self):
         """ CityManager starts to manage its city:
