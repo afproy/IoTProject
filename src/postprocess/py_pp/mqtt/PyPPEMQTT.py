@@ -77,7 +77,8 @@ class PyPPEMQTT:
 
         # If we go through this we had a problem with the connection phase
         elif 0 < rc <= 5:
-            errMsg = "/!\ PyPPEngine connection to broker was refused because of: "
+            errMsg = "/!\ PyPPEngine connection to broker was refused" \
+                     " because of: "
             if rc == 1:
                 errMsg.append("the use of an incorrect protocol version!")
             elif rc == 2:
@@ -89,7 +90,8 @@ class PyPPEMQTT:
             else:
                 errMsg.append("it was not authorised!")
         else:
-            errMsg = "/!\ PyPPEngine connection to broker was refused for unknown reasons!"
+            errMsg = "/!\ PyPPEngine connection to broker was refused for" \
+                     " unknown reasons!"
         print(errMsg)
         # Stopping the loop
         self.py_ppe_mqtt_client.loop_stop()
@@ -116,7 +118,8 @@ class PyPPEMQTT:
         if rc == 0:
             print("PyPPEngine successfully disconnected!")
         else:
-            print("Unexpected disconnection of PyPPEngine! Reconnecting right away!")
+            print("Unexpected disconnection of PyPPEngine!" \
+                  " Reconnecting right away!")
             # The reconnection is performed automatically by our client since
             # we're using loop_start() so no need to manually tell our client
             # to reconnect.
@@ -134,7 +137,8 @@ class PyPPEMQTT:
             msg (:obj: MQTTMessage): message sent by the broker
         """
         # A new message is received
-        self.notifier.notify(False, msg.topic, msg.payload.decode("utf-8","ignore"))
+        self.notifier.notify(False, msg.topic, msg.payload.decode("utf-8", \
+                                                                  "ignore"))
 
 
     def mySubscribe(self, topic, qos = 2):
