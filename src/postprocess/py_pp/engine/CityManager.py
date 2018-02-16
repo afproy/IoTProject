@@ -99,4 +99,50 @@ class CityManager:
                 print("Shutting down...")
                 sys.exit()
         else:
-            print("CityManager received the following message: %s" % (msg))
+            print("------------")
+            print("Topic: %s" % (topic))
+            print("Message: %s" % (msg))
+            jsonMsg = json.loads(msg)
+            if CityManager.msgComplete(jsonMsg):
+                chat_ID = jsonMsg["chat_ID"]
+                location = jsonMsg["location"]
+                status = jsonMsg["status"]
+                if CityManager.locComplete(location):
+                    latU = location["latitude"]
+                    longU = location["longitude"]
+                    usersToBeNotified = self.myCity.updateUser(chat_ID, latU, \
+                                                       longU, status == "open")
+                    if usersToBeNotified != None:
+                        for u in usersToBeNotified:
+                            self.notifyUser(u)
+                    return
+            print("Bad format of the JSON!")
+
+
+    def notifyUser(self, user):
+        """ method which notifies the bot:
+
+        About the users concerned with a rain warning. For the moment it only
+        prints that it is notifying the user.
+
+        Args:
+            user (:obj: `User`): user to notify
+        """
+        print("Notifying: %s" % (str(user)))
+
+
+    def msgComplete(msg):
+        """ method to check whether the message received is complete
+        Args:
+            msg (:obj: `dict` of :obj: `JSON`): json payload received
+        """
+        return ("chat_ID" in msg) and ("location" in msg) and ("status" in msg)
+
+
+    def locComplete(location):
+        """ method to check whether the message received is complete
+        Args:
+            location (:obj: `dict` of :obj: `float`): location received in the
+                json paylad
+        """
+        return ("latitude" in location) and ("longitude" in location)
