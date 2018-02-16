@@ -1,6 +1,7 @@
 from mqtt.PyPPEMQTT import PyPPEMQTT
-from engine.City import City
+from engine.space.City import City
 import sys
+import json
 
 class CityManager:
     """ Class CityManager:
