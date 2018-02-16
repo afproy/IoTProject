@@ -1,14 +1,27 @@
 """
-Python Postprocessing Engine:
+Python PostProcess Engine:
 
-The Python post process engine will receive as input: ID, location and the
-status (open/closed) for each umbrella. The script itself will be implemented
-in a MQTT fashion and it will act as a subscriber to receive the data. It will
-then send notifications to the interested users based on the processed data.
-Using the post process engine we can isolate the raw data that will be sent by
-umbrellas and the gui on wich notifications will appear (Telegram). So, the
-system is more flexible and new features (i.e. new interface for notifications)
-can be added without modifying the entire platform. This will be the actor in
-charge of sending rain warnings to the users.
-
+Main script to be run to make the postprocess engine operational.
+It instantiates a CityManager, starts it, subscribes to the notifications topic
+and waits until Ctrl+'C' is pressed.
 """
+
+from engine.CityManager import CityManager
+import time
+
+
+if __name__ == "__main__":
+
+    try:
+        # Creating a CityManager for turin with the coordinates of a NW point
+        # and of a SE point, it will be composed of 4*4 Neighborhood and the
+        # threshold of open umbrellas per neighborhood after which a rain
+        # warning is sent is set to 2
+        TurinManager = CityManager("Turin", 45.106234, 7.619275, 45.024758, 7.719869, 4, 2)
+        TurinManager.manage()
+        TurinManager.myPyPPEMqttClient.mySubscribe("/Turin/notifications/#")
+
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        TurinManager.rest()
