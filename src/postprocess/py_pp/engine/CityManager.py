@@ -52,14 +52,24 @@ class CityManager:
         print("Starting to manage %s's parc of umbrellas!" % (self.clientID))
         self.myPyPPEMqttClient.start()
 
+
     def rest(self):
         """ CityManager stops managing its city by stopping its MQTT client.
         """
-        print("Finishing management of %s's parc of umbrellas!" % (self.clientID))
+        print("Finishing management of %s's parc of umbrellas!" \
+              %(self.clientID))
         self.myPyPPEMqttClient.stop()
+
 
     def notify(self, bError, topic, msg):
         """ Method through which CityManager is notified by its MQTT client:
+
+        When it is notified, the payload is split into the fields that
+        represents a user and then City's method updateUser() is called so that
+        it updates the position and/or status of its users. In return it
+        receives the list of users who need to receive a rain warning so that
+        the CityManager can then notify the bot so it can send notifications to
+        the concerne users.
 
         Args:
             bError (bool): True when there was an error on the MQTT client's
@@ -84,7 +94,8 @@ class CityManager:
         """
         if bError:
             if topic == "connection":
-                print("/!\ Connection error of CityManager's MQTT client: %s" & (msg))
+                print("/!\ Connection error of CityManager's MQTT client: %s" \
+                      % (msg))
                 print("Shutting down...")
                 sys.exit()
         else:
