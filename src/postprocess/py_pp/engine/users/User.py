@@ -35,6 +35,8 @@ class User:
 
 
     def __eq__(self, other):
+        if other == None or not isinstance(other, User):
+            return False
         return self.chat_ID == other.chat_ID
 
 

@@ -1,12 +1,10 @@
 import paho.mqtt.client as MQTT
 
-class PyPPEMQTT:
-    """ Class PyPPEMQTT:
+class OurMQTT:
+    """ Class OurMQTT:
 
-    It is the Python PostProcess Engine MQTT subscriber. It is through an
-    instance of this class that the postprocess engine is able to receive the
-    messages from the broker that are necessary to manage the city and send
-    notifications to users.
+    It is a general purpose MQTT client class, can be used to implement either
+    MQTT subscribers or publishers.
 
     Use the methods in this order:
     1) start()
@@ -14,29 +12,29 @@ class PyPPEMQTT:
     3) stop()
 
     Attributes:
-        clientID: represents the ID of the city, "Turin" for example
+        clientID: represents the ID of the MQTT client
         broker (str): URL of the broker used
         port (int): port of the broker used
         topic (str): topic to subscribe to
-        notifier (:obj: CityManager.notifier): reference of the method to call
-            upon reception of a message
-        py_ppe_mqtt_client (:obj: MQTT.Client): MQTT client of the subscriber
+        notifier (:obj: notifier): reference of the object on which to call the
+            notify() method upon reception of a message
+        mqtt_client (:obj: MQTT.Client): MQTT client
     """
 
 
     def __init__(self, clientID, broker, port, notifier):
-        """ Constructor of PyPPEMQTT:
+        """ Constructor of OurMQTT:
 
-        Initializes all the attributes of the subscriber and instantiates a
+        Initializes all the attributes of our client and instantiates a
         MQTT client. It also registers all the necessary callbacks of the
         MQTT client.
 
         Args:
-            clientID: represents the ID of the city, "Turin" for example
+            clientID: represents the ID of the MQTT client
             broker (str): URL of the broker used
             port (int): port of the broker used
-            notifier (:obj: CityManager.notifier): reference of the method to
-                call upon reception of a message
+            notifier (:obj: notifier): reference of the method to call upon
+                reception of a message
         """
         self.broker = broker
         self.port = port
@@ -44,14 +42,15 @@ class PyPPEMQTT:
         self.clientID = clientID
 
         self.topic = ""
+        self.isSubscriber = False
 
         # create an instance of paho.mqtt.client
-        self.py_ppe_mqtt_client = MQTT.Client(clientID, False) 
+        self.mqtt_client = MQTT.Client(clientID, False) 
 
         # register the callback
-        self.py_ppe_mqtt_client.on_connect = self.myOnConnect
-        self.py_ppe_mqtt_client.on_disconnect = self.myOnDisconnect
-        self.py_ppe_mqtt_client.on_message = self.myOnMessage
+        self.mqtt_client.on_connect = self.myOnConnect
+        self.mqtt_client.on_disconnect = self.myOnDisconnect
+        self.mqtt_client.on_message = self.myOnMessage
 
 
     def myOnConnect(self, mqtt_client, userdata, flags, rc):
@@ -59,8 +58,8 @@ class PyPPEMQTT:
         
         Called upon connection to the broker. Everything goes well if rc == 0
         otherwise we have some connection issues with the broker. If so it is
-        printed in the terminal and the CityManager is notified so that it can
-        shut down.
+        printed in the terminal and the notify() method of the notifier is
+        called so that an appropriate action can be taken.
 
         Args:
             mqtt_client (:obj: MQTT.Client): client instance of the callback
@@ -72,13 +71,13 @@ class PyPPEMQTT:
         errMsg = ""
 
         if rc == 0:
-            print("PyPPEngine successfully connected to broker!")
+            print(self.clientID + " successfully connected to broker!")
             return
 
         # If we go through this we had a problem with the connection phase
         elif 0 < rc <= 5:
-            errMsg = "/!\ PyPPEngine connection to broker was refused" \
-                     " because of: "
+            errMsg = "/!\ " + self.clientID + " connection to broker was " \
+                     "refused because of: "
             if rc == 1:
                 errMsg.append("the use of an incorrect protocol version!")
             elif rc == 2:
@@ -90,13 +89,13 @@ class PyPPEMQTT:
             else:
                 errMsg.append("it was not authorised!")
         else:
-            errMsg = "/!\ PyPPEngine connection to broker was refused for" \
-                     " unknown reasons!"
+            errMsg = "/!\ " + self.clientID + " connection to broker was " \
+                     "refused for unknown reasons!"
         print(errMsg)
         # Stopping the loop
-        self.py_ppe_mqtt_client.loop_stop()
+        self.mqtt_client.loop_stop()
 
-        # Notifying the CityManager
+        # Notifying the notifier
         self.notifier.notify(True, "connection", errMsg)
 
 
@@ -116,9 +115,9 @@ class PyPPEMQTT:
             rc (int): result code
         """
         if rc == 0:
-            print("PyPPEngine successfully disconnected!")
+            print(self.clientID + " successfully disconnected!")
         else:
-            print("Unexpected disconnection of PyPPEngine!" \
+            print("Unexpected disconnection of " + self.clientID + "." \
                   " Reconnecting right away!")
             # The reconnection is performed automatically by our client since
             # we're using loop_start() so no need to manually tell our client
@@ -129,7 +128,7 @@ class PyPPEMQTT:
         """ myOnMessage function called by on_message callback:
 
         Our subscriber has received a message and therefore, it notifies the
-        CityManager.
+        notifier.
 
         Args:
             mqtt_client (:obj: MQTT.Client): client instance of the callback
@@ -141,6 +140,22 @@ class PyPPEMQTT:
                                                                   "ignore"))
 
 
+    def myPublish (self, topic, msg, qos = 2):
+        """ myPublish:
+
+        Method that makes the MQTT client publish to the the broker a message
+        under a specific topic and with a particular QoS, which by default is 2.
+
+        Args:
+            topic (str): topic to which you desire to publish
+            msg (str): message you wish to publish
+            qos (int, optional): desired QoS, default to 2
+        """
+        print ("%s publishing %s with topic %s" % (self.clientID, msg, topic))
+        # publish a message with a certain topic
+        self.mqtt_client.publish(topic, msg, qos)
+
+
     def mySubscribe(self, topic, qos = 2):
         """ mySubscribe:
         
@@ -149,35 +164,39 @@ class PyPPEMQTT:
 
         Args:
             topic (str): topic to which you desire to subscribe
-            qos (int): desired QoS
+            qos (int, optional): desired QoS, default to 2
         """
-        print("PyPPEngine subscribing to %s" % (topic))
+        print("%s subscribing to %s" % (self.clientID, topic))
         # Subscribing to a topic
-        self.py_ppe_mqtt_client.subscribe(topic, qos)
+        self.mqtt_client.subscribe(topic, qos)
+        # Remembering that our client is a subscriber
+        self.isSubscriber = True
         self.topic = topic
 
 
     def start(self):
         """ start:
 
-        Starts the subscriber by connecting to the broker and starting the loop
+        Starts our client by connecting to the broker and starting the loop
         necessary to receive messages from the broker.
         """
         # Connecting our client to the broker
-        self.py_ppe_mqtt_client.connect(self.broker , self.port)
+        self.mqtt_client.connect(self.broker , self.port)
         # Starting the loop to start receiving messages from the broker
-        self.py_ppe_mqtt_client.loop_start()
+        self.mqtt_client.loop_start()
 
 
     def stop(self):
         """ stop:
 
-        Stops the subscriber by unsubscribing from the topic, stopping the loop,
-        disconnecting from the broker
+        Stops our client by unsubscribing from the topic (if our client is a
+        subscriber), stopping the loop, and disconnecting from the broker.
         """
-        # Unsubscribing from topic
-        self.py_ppe_mqtt_client.unsubscribe(self.topic)
+        if self.isSubscriber:
+            # Unsubscribing from topic
+            self.mqtt_client.unsubscribe(self.topic)
+
         # Stopping the loop
-        self.py_ppe_mqtt_client.loop_stop()
+        self.mqtt_client.loop_stop()
         # Finaly, disconnecting the client from the broker
-        self.py_ppe_mqtt_client.disconnect()
+        self.mqtt_client.disconnect()

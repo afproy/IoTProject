@@ -67,7 +67,7 @@ class Neighborhood(Settlement):
                 self.usersWClosedUmbrellas.add(user)
                 if len(self.usersWOpenUmbrellas) >= self.threshold:
                     print("Sending notification to new user %s" % str(user))
-                    return user
+                    return [user]
 
         return None
 
@@ -89,6 +89,8 @@ class Neighborhood(Settlement):
 
 
     def __eq__(self, other):
+        if other == None or not isinstance(other, Neighborhood):
+            return False
         return (self.nwLat, self.nwLong, self.seLat, self.seLong) == \
                (other.nwLat, other.nwLong, other.seLat, other.seLong)
 

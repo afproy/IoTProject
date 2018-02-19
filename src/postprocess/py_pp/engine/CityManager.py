@@ -1,6 +1,8 @@
-from mqtt.PyPPEMQTT import PyPPEMQTT
+import os, sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
+                                            './../../../mqtt/')))
+from OurMQTT import OurMQTT
 from engine.space.City import City
-import sys
 import json
 
 class CityManager:
@@ -13,7 +15,7 @@ class CityManager:
 
     Attributes:
         clientID (str): represents the ID of a city, 'Turin' for example
-        myPyPPEMqttClient (:obj: PyPPEMQTT): MQTT client, implements a
+        myPyPPEMqttClient (:obj: OurMQTT): MQTT client, will be used as a
             subscriber
         myCity (:obj: City): the City to manage
     """
@@ -37,7 +39,7 @@ class CityManager:
                 umbrella closed need to be sent
         """
         self.clientID = clientID
-        self.myPyPPEMqttClient = PyPPEMQTT(self.clientID, "iot.eclipse.org", \
+        self.myPyPPEMqttClient = OurMQTT("PyPPEngine", "iot.eclipse.org", \
                                            1883, self)
         self.myCity = City(self.clientID, nwLat, nwLong, seLat, seLong, n, \
                            threshold)
