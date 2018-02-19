@@ -89,6 +89,8 @@ class Neighborhood(Settlement):
 
 
     def __eq__(self, other):
+        if other == None or not isinstance(other, Neighborhood):
+            return False
         return (self.nwLat, self.nwLong, self.seLat, self.seLong) == \
                (other.nwLat, other.nwLong, other.seLat, other.seLong)
 
