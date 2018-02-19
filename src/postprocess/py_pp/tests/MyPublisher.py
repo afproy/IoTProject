@@ -1,26 +1,31 @@
-import paho.mqtt.client as MQTT
+import os, sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
+                                            './../../../mqtt/')))
+from OurMQTT import OurMQTT
+import sys
 
-class MyPublisher:
+class MyPublisher():
+
     def __init__(self, clientID):
         self.clientID = clientID
-
-        # create an instance of paho.mqtt.client
-        self.mqtt_client = MQTT.Client(self.clientID, False) 
-        # register the callback
-        self.mqtt_client.on_connect = self.myOnConnect
+        self.mqtt_client = OurMQTT(self.clientID, "iot.eclipse.org", 1883, \
+                                    self) 
+        
 
     def start(self):
-        #manage connection to broker
-        self.mqtt_client.connect('iot.eclipse.org', 1883)
-        self.mqtt_client.loop_start()
+        print("Running %s" % (self.clientID))
+        self.mqtt_client.start()
+
 
     def stop(self):
-        self.mqtt_client.loop_stop()
-        self.mqtt_client.disconnect()
+        print("Ending %s" % (self.clientID))
+        self.mqtt_client.stop ()
 
-    def myPublish(self, topic, message):
-        # publish a message with a certain topic
-        self.mqtt_client.publish(topic, message, 2)
 
-    def myOnConnect(self, paho_mqtt, userdata, flags, rc):
-        print("Connected to message broker with result code: " + str(rc))
+    def notify(self, topic, msg):
+        if bError:
+            if topic == "connection":
+                print("/!\ Connection error of %s's MQTT client: %s" \
+                      % (self.clientID, msg))
+                print("Shutting down...")
+                sys.exit()
