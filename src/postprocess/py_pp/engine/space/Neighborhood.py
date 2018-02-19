@@ -67,7 +67,7 @@ class Neighborhood(Settlement):
                 self.usersWClosedUmbrellas.add(user)
                 if len(self.usersWOpenUmbrellas) >= self.threshold:
                     print("Sending notification to new user %s" % str(user))
-                    return user
+                    return [user]
 
         return None
 
