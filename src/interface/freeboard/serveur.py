@@ -1,7 +1,7 @@
 """ Serveur to run the html page of freeboard"""
 
 import cherrypy
-
+import os, os.path
 
 class Generator(object):
     exposed = True
@@ -13,8 +13,28 @@ if __name__ == '__main__':
     '/': {
     'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
     'tools.sessions.on': True,
+    'tools.staticdir.root':	os.path.abspath(os.getcwd())
+    },
+    '/css': {
+    'tools.staticdir.on' : True,
+    'tools.staticdir.dir' : './css'
+    },
+    '/js': {
+    'tools.staticdir.on': True,
+    'tools.staticdir.dir': './js'
+    },
+    '/img': {
+    'tools.staticdir.on': True,
+    'tools.staticdir.dir': './img'
+    },
+    '/plugins': {
+    'tools.staticdir.on': True,
+    'tools.staticdir.dir': './plugins'
+    },
+    '/dashboard': {
+    'tools.staticdir.on': True,
+    'tools.staticdir.dir': './dashboard'
     }
-
     }
     cherrypy.tree.mount (Generator(), '/', conf)
     cherrypy.config.update({'server.socket_host': '0.0.0.0'})
