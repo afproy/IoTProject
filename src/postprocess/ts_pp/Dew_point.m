@@ -39,3 +39,5 @@ plot(temp);
 xlabel('Time'); 
 ylabel('Dew point (C)'); 
 title('Dew point time evolution');
+
+% freeboard iframe=<iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/apps/matlab_visualizations/210501"></iframe>
