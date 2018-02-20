@@ -13,3 +13,4 @@ histogram(temp);
 xlabel('Temperature (°C)'); 
 ylabel('Number of Measurements\newline for Each Temperature'); 
 title('Histogram of Temperature Variation');
+% freeb iframe=<iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/apps/matlab_visualizations/210501"></iframe>
