@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+
 """
 Created on Tue Feb 20 13:49:30 2018
 
@@ -18,11 +17,13 @@ if __name__ == "__main__":
         # threshold of open umbrellas per neighborhood after which a rain
         # warning is sent is set to 2
         TurinFboard = FboardAdapter("Turin")
+        
         TurinFboard.process()
-        #TurinFboard.myPyPPEMqttClient.mySubscribe("/Turin/notifications/#")
+        TurinFboard.myFboardMqttSub.mySubscribe("/Turin/1234/sensors/temperature")
         #Subscriber will be implemented later
 
         while True:
-            time.sleep(5)
+            #TurinFboard.send()
+            time.sleep(1)
     except KeyboardInterrupt:
         TurinFboard.rest()

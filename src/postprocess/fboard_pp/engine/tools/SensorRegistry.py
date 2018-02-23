@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+
 """
 Created on Tue Feb 20 13:30:40 2018
 
@@ -10,12 +9,19 @@ import json
 class SensorRegistry:
     
     def __init__(self):
-        self.registry=0
+        self.registry=[]
+        self.a=0
     
     def register(self,umID, status):
-        self.registry+=1
+        if status and (not umID in self.registry) :
+            self.registry.append(umID)
+        elif (not status) and (umID in self.registry):
+            self.registry.delete(umID)
     
     def getNumber(self,city):
-        topic="/%s/freeboard/umbrellas" %city
-        msg={"umbrellas":self.registry}
+        topic=""
+        msg=""
+        self.a+=1
+        topic="/Turin/freeboard/umbrellas"
+        msg={"umbrellas":self.a}#len(self.registry)}
         return topic, json.dumps(msg)
