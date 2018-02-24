@@ -96,9 +96,6 @@ class Catalog_checker():
                         print "Updated myactor_list with %s" %new_actor
                     nr+=1
 
-
-               
-
         elif new_actor["type"] == "service":
             print "NEW data from SERVICE"
             actor_type = 'service'
@@ -136,7 +133,7 @@ class Catalog_checker():
                     if service['serviceID'] == new_actor['serviceID']:
                         
                         new_actor['last_update'] = now
-                        print "Updated device -> %s" %new_actor
+                        print "Updated service -> %s" %new_actor
                         msg = {}
                         msg['status'] = 'updated'
                         msg['data'] = new_actor
@@ -152,10 +149,61 @@ class Catalog_checker():
 
                         print "Updated myactor_list with %s" %new_actor
                     nr+=1
-                    
+
         elif new_actor["type"] == "interface":
             print "NEW data from INTERFACE"
             actor_type = 'interface'
+        
+            # check for interfaces if are present or not in the catalog
+            if not any(interface['interfaceID'] == new_actor['interfaceID'] for interface in myactor_list['interface']):
+                print "Interface not present -> register new Interface"
+
+
+                new_actor['last_update'] = now
+                nr_of_interfaces = len(myactor_list['interface'])
+                print "there are now %s interfaces" %nr_of_interfaces
+                
+                print "************ interface added to list"
+                myactor_list['interface'].append(new_actor)
+                msg = {}
+                msg['status'] = 'registered'
+                msg['data'] = new_actor
+                response_msg = json.dumps(msg, indent = 4)
+                print response_msg
+
+                
+                nr_of_interfaces = len(myactor_list['interface'])
+                print "there are now %s interfaces" %nr_of_interfaces
+
+                print myactor_list['interface']
+
+            else:
+                print "-> Interface EXISTS -> update the Interface"
+
+                nr = 0
+                for interface in myactor_list['interface']:
+                    print "---> existing interface data -> %s" %interface
+
+                    if interface['interfaceID'] == new_actor['interfaceID']:
+                        
+                        new_actor['last_update'] = now
+                        print "Updated interface -> %s" %new_actor
+                        msg = {}
+                        msg['status'] = 'updated'
+                        msg['data'] = new_actor
+                        response_msg = json.dumps(msg, indent = 4)
+
+                        print "===  myactor_list['interface'][nr] before"
+                        print myactor_list['interface'][nr]
+                        
+                        myactor_list['interface'][nr] = new_actor
+
+                        print "===  myactor_list['interface'][nr] after "
+                        print myactor_list['interface'][nr]
+
+                        print "Updated myactor_list with %s" %new_actor
+                    nr+=1
+
         
         return myactor_list, response_msg
 
