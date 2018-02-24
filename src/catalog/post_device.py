@@ -26,4 +26,5 @@ while True:
     #payload['data'] = payload['data'] + 5
     payload['deviceID'] = payload['deviceID'] * 2
 
+    print "response from the catalog: %s" %r.content
     time.sleep(3)
