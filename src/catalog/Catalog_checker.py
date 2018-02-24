@@ -48,6 +48,7 @@ class Catalog_checker():
             print "NEW data from DEVICE"
             actor_type = 'device'
             
+            # check for devices if are present or not in the catalog
             if not any(device['deviceID'] == new_actor['deviceID'] for device in myactor_list['device']):
                 print "Device not present -> register new Device"
 
@@ -101,8 +102,57 @@ class Catalog_checker():
         elif new_actor["type"] == "service":
             print "NEW data from SERVICE"
             actor_type = 'service'
+            
+            # check for services if are present or not in the catalog
+            if not any(service['serviceID'] == new_actor['serviceID'] for service in myactor_list['service']):
+                print "Service not present -> register new Service"
 
 
+                new_actor['last_update'] = now
+                nr_of_services = len(myactor_list['service'])
+                print "there are now %s services" %nr_of_services
+                
+                print "************ service added to list"
+                myactor_list['service'].append(new_actor)
+                msg = {}
+                msg['status'] = 'registered'
+                msg['data'] = new_actor
+                response_msg = json.dumps(msg, indent = 4)
+                print response_msg
+
+                
+                nr_of_services = len(myactor_list['service'])
+                print "there are now %s services" %nr_of_services
+
+                print myactor_list['service']
+
+            else:
+                print "-> Service EXISTS -> update the Service"
+
+                nr = 0
+                for service in myactor_list['service']:
+                    print "---> existing service data -> %s" %service
+
+                    if service['serviceID'] == new_actor['serviceID']:
+                        
+                        new_actor['last_update'] = now
+                        print "Updated device -> %s" %new_actor
+                        msg = {}
+                        msg['status'] = 'updated'
+                        msg['data'] = new_actor
+                        response_msg = json.dumps(msg, indent = 4)
+
+                        print "===  myactor_list['service'][nr] before"
+                        print myactor_list['service'][nr]
+                        
+                        myactor_list['service'][nr] = new_actor
+
+                        print "===  myactor_list['service'][nr] after "
+                        print myactor_list['service'][nr]
+
+                        print "Updated myactor_list with %s" %new_actor
+                    nr+=1
+                    
         elif new_actor["type"] == "interface":
             print "NEW data from INTERFACE"
             actor_type = 'interface'

@@ -93,6 +93,7 @@ class Catalog_config():
             print "======================================"
             updated_actors, message = Catalog_checker().check_actor(actor_dict, new_data_dict)
 
+    
             old_catalog_dict['actor'] = updated_actors
 
             catalog_file = open(catalog_name,'w')
