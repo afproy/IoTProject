@@ -1,0 +1,73 @@
+{
+    "actor": {
+        "device": [
+            {
+                "URL": "myURL", 
+                "sensors": [
+                    {
+                        "type": "temperature", 
+                        "value": 25, 
+                        "unit": "C"
+                    }, 
+                    {
+                        "type": "humidity", 
+                        "value": 40, 
+                        "unit": "%"
+                    }, 
+                    {
+                        "type": "button", 
+                        "value": "open", 
+                        "unit": "open/closed"
+                    }
+                ], 
+                "deviceID": "RPI1", 
+                "last_update": "2018-02-22 17:32:38"
+            }, 
+            {
+                "deviceID": 111, 
+                "last_update": "2018-02-22 17:32:38"
+            }, 
+            {
+                "deviceID": 222, 
+                "last_update": "2018-02-22 17:32:38"
+            }, 
+            {
+                "deviceID": 444, 
+                "last_update": "2018-02-22 17:32:38"
+            }
+        ], 
+        "interface": [
+            {
+                "info": {
+                    "access": "MQTT", 
+                    "topics": "topic or list of topics", 
+                    "botID": 123456
+                }, 
+                "interfaceID": "telegram", 
+                "last_update": "2018-02-22 17:32:38"
+            }, 
+            {
+                "info": {
+                    "access": "MQTT", 
+                    "topics": "topic or list of topics"
+                }, 
+                "interfaceID": "freeoard", 
+                "last_update": "2018-02-22 17:32:38"
+            }
+        ], 
+        "service": [
+            {
+                "info": {
+                    "access": "MQTT", 
+                    "botID": 1237456
+                }, 
+                "serviceID": "pp1", 
+                "last_update": "2018-02-22 17:32:38"
+            }, 
+            {
+                "ServiceID": "pp2", 
+                "last_update": "2018-02-22 17:32:38"
+            }
+        ]
+    }
+}
