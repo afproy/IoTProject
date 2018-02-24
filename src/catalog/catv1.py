@@ -50,12 +50,17 @@ class Catalog_manager():
 class Catalog_checker():
     
     
-    def check_actor(self, myactor_list):
+    def check_actor(self, myactor_list, new_actor):
         for actor in myactor_list:
             print actor
-
-        
-
+       
+        print "new actor data -> %s" %new_actor
+        if new_actor["type"] == "device":
+            print "NEW DEVICE"
+        elif new_actor["type"] == "service":
+            print "NEW SERVICE"
+        elif new_actor["type"] == "interface":
+            print "NEW INTERFACE"
 
 
 
@@ -97,7 +102,7 @@ class Catalog_config():
             actor_list = old_catalog_dict['actor']
             #print actor_list
             print "======================================"
-            Catalog_checker().check_actor(actor_list)
+            Catalog_checker().check_actor(actor_list, new_data)
             
 
 
