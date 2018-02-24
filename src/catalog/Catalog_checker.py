@@ -45,7 +45,8 @@ class Catalog_checker():
        
         print "new actor data -> %s" %new_actor
         if new_actor["type"] == "device":
-            print "NEW DEVICE"
+            print "NEW data from DEVICE"
+            actor_type = 'device'
             
             if not any(device['deviceID'] == new_actor['deviceID'] for device in myactor_list['device']):
                 print "Device not present -> register new Device"
@@ -56,14 +57,18 @@ class Catalog_checker():
                 
                 print "************ device added to list"
                 myactor_list['device'].append(new_actor)
-                response_msg = "Registered new device with these data: %s " %json.dumps(new_actor, indent = 4)
+                msg = {}
+                msg['status'] = 'registered'
+                msg['data'] = new_actor
+                response_msg = json.dumps(msg, indent = 4)
+                print response_msg
 
+                
                 nr_of_devices = len(myactor_list['device'])
                 print "there are now %s devices" %nr_of_devices
 
                 print myactor_list['device']
  
-
             else:
                 print "-> Device EXISTS -> update the Device"
                 nr = 0
@@ -74,7 +79,10 @@ class Catalog_checker():
                         
                         new_actor['last_update'] = now
                         print "Updated device -> %s" %new_actor
-                        response_msg = "Updated device with these data: %s " %json.dumps(new_actor, indent = 4)
+                        msg = {}
+                        msg['status'] = 'updated'
+                        msg['data'] = new_actor
+                        response_msg = json.dumps(msg, indent = 4)
 
                         print "===  myactor_list['device'][nr] before"
                         print myactor_list['device'][nr]
@@ -91,9 +99,13 @@ class Catalog_checker():
                
 
         elif new_actor["type"] == "service":
-            print "NEW SERVICE"
+            print "NEW data from SERVICE"
+            actor_type = 'service'
+
+
         elif new_actor["type"] == "interface":
-            print "NEW INTERFACE"
+            print "NEW data from INTERFACE"
+            actor_type = 'interface'
         
         return myactor_list, response_msg
 
