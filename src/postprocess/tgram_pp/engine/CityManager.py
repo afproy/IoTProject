@@ -131,6 +131,9 @@ class CityManager:
             user (:obj: `User`): user to notify
         """
         print("Notifying: %s" % (str(user)))
+        topic = "/Turin/" + str(user.chat_ID) + "/rainbot"
+        payload = {"chat_ID": user.chat_ID, "notify": True}
+        self.myPyPPEMqttClient.myPublish(topic, json.dumps(payload))
 
 
     def msgComplete(msg):
