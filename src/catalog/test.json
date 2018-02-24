@@ -1,0 +1,63 @@
+{
+	"actor": {
+		"device": [{
+            "deviceID": "RPI1",
+            "last_update": "2018-02-22 17:32:38",
+            "URL" : "myURL",
+            "sensors": [
+                {"type": "temperature",
+                 "unit": "C",
+                 "value": 25
+                },
+
+                {"type": "humidity",
+                 "unit": "%",
+                 "value": 40
+                },
+
+                {"type": "button",
+                 "unit": "open/closed",
+                 "value": "open"
+                }
+            ]
+			},
+			{
+			"deviceID": "RPI2",
+			"last_update": "2018-02-22 17:32:38"
+			}
+	    ],
+
+		"service": [{
+				"serviceID": "pp1",
+                "last_update": "2018-02-22 17:32:38",
+                "info": {
+                    "botID": 1237456,
+                    "access": "MQTT"
+                }
+			},
+			{
+				"ServiceID": "pp2",
+				"last_update": "2018-02-22 17:32:38"
+			}
+        ],
+        
+		"interface": [{
+            "interfaceID": "telegram",
+            "last_update": "2018-02-22 17:32:38",
+            "info":{
+                "botID":123456,
+                "access": "MQTT",
+                "topics": "topic or list of topics"
+            }
+        },
+        {
+            "interfaceID": "freeoard",
+            "last_update": "2018-02-22 17:32:38",
+            "info": {
+                "access":"MQTT",
+                "topics":"topic or list of topics"
+            }
+        }
+    ]
+	}
+}
