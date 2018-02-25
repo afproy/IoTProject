@@ -146,8 +146,8 @@ class OurMQTT:
             msg (:obj: MQTTMessage): message sent by the broker
         """
         # A new message is received
-        logger.info("MQTT client %s received a message %s on topic %s."
-                    % (self.clientID, msg.topic, msg.payload))
+        logger.info("MQTT client %s received a message:\n--%s,\n--on topic:" \
+                    "\n--%s." % (self.clientID, msg.payload, msg.topic))
         self.notifier.notify(False, msg.topic, msg.payload.decode("utf-8", \
                                                                   "ignore"))
 
