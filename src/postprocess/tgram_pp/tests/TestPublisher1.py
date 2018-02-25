@@ -11,7 +11,7 @@ if __name__ == "__main__":
         timenow = time.ctime()
         payload = {"chat_ID": 123456, "location": {"latitude": 45.03, "longitude": 7.62}, "status": "closed", "timestamp": str(timenow)}
         print("Publishing: '%s'" % (payload))
-        test.mqtt_client.myPublish("/Turin/notifications/u1", json.dumps(payload))   
+        test.mqtt_client.myPublish("/Turin/1/notifications", json.dumps(payload))   
         a += 1
         time.sleep(1)
 

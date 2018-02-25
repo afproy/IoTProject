@@ -1,4 +1,11 @@
 from engine.space.Settlement import Settlement
+import logging
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
+
 
 class Neighborhood(Settlement):
     """ Class Neighborhood:
@@ -58,15 +65,19 @@ class Neighborhood(Settlement):
             if user not in self.usersWOpenUmbrellas:
                 self.usersWOpenUmbrellas.add(user)
                 if len(self.usersWOpenUmbrellas) == self.threshold:
-                    print("Sending notification to all users with closed" \
-                          " umbrellas here")
+                    logger.info("Sending notification to all users with "     \
+                                "closed umbrellas in neighborhood defined "   \
+                                "by the following coordinates: %s/%s - %s/%s."\
+                                % (self.nwLat, self.nwLong, self.seLat,       \
+                                   self.seLong))
                     return self.usersWClosedUmbrellas
         else:
             self.usersWOpenUmbrellas.discard(user)
             if user not in self.usersWClosedUmbrellas:
                 self.usersWClosedUmbrellas.add(user)
                 if len(self.usersWOpenUmbrellas) >= self.threshold:
-                    print("Sending notification to new user %s" % str(user))
+                    logger.info("Sending notification to new user %s." \
+                                % str(user))
                     return [user]
 
         return None
