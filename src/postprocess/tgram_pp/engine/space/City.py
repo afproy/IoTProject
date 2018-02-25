@@ -2,6 +2,12 @@ from engine.space.Settlement import Settlement
 from engine.space.Neighborhood import Neighborhood
 from engine.space.NotWithinAreaException import NotWithinAreaException
 from engine.users.User import User
+import logging
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
 
 class City(Settlement):
     """ Class City:
@@ -40,6 +46,7 @@ class City(Settlement):
             threshold (int): threshold of open umbrellas per neighborhood after
                 which a rain warning is sent
         """
+        logger.info("Initializing representation of the city of %s!" % (name))
         super().__init__(nwLat, nwLong, seLat, seLong)
         self.name = name
         self.n = n
@@ -69,6 +76,8 @@ class City(Settlement):
                 seLongN = nwLongN + quantumLongN
                 self.grid[i][j] = Neighborhood(nwLatN, nwLongN, seLatN, \
                                                seLongN, threshold)
+        logger.info("Created grid of Neighborhood over the city of %s." \
+                    % (self.name))
 
 
     def updateUser(self, chat_ID, latU, longU, bUmbrellaOpen):
@@ -88,11 +97,13 @@ class City(Settlement):
             usersToBeNotified, the set of users to be notified
         """
 
+        logger.info("Updating position of user %i in the grid." % chat_ID)
+
         # Finding out neighborhood of our user
         try:
             newNeighborhood = self.findNeighborhood(chat_ID, latU, longU)
         except NotWithinAreaException as e:
-            print(e.msg)
+            logger.exception(e.msg)
             return
 
         user = User(chat_ID, latU, longU, bUmbrellaOpen)
@@ -124,7 +135,7 @@ class City(Settlement):
         for i in range(self.n):
             for j in range(self.n):
                 if self.grid[i][j].isWithin(latU, longU):
-                    print("Placing user %i in Neighborhood (%i, %i)" % \
+                    logger.info("Placing user %i in Neighborhood (%i, %i)." % \
                           (chat_ID, i, j))
                     return self.grid[i][j]
 
