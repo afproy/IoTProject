@@ -1,9 +1,9 @@
 {
-    "broker": "iot.eclipse.org", 
+    "broker": "iot.eclipse.org",
     "actor": {
-        "device": [], 
-        "interface": [], 
+        "device": [],
+        "interface": [],
         "service": []
-    }, 
+    },
     "port": 1883
 }

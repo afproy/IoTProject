@@ -41,167 +41,167 @@ class Catalog_checker():
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         for actor in myactor_list:
-            print actor
+            print (actor)
        
-        print "new actor data -> %s" %new_actor
+        print ("new actor data -> %s" %new_actor)
         if new_actor["type"] == "device":
-            print "NEW data from DEVICE"
+            print ("NEW data from DEVICE")
             actor_type = 'device'
             
             # check for devices if are present or not in the catalog
             if not any(device['deviceID'] == new_actor['deviceID'] for device in myactor_list['device']):
-                print "Device not present -> register new Device"
+                print ("Device not present -> register new Device")
 
                 new_actor['last_update'] = now
                 nr_of_devices = len(myactor_list['device'])
-                print "there are now %s devices" %nr_of_devices
+                print ("there are now %s devices" %nr_of_devices)
                 
-                print "************ device added to list"
+                print ("************ device added to list")
                 myactor_list['device'].append(new_actor)
                 msg = {}
                 msg['status'] = 'registered'
                 msg['data'] = new_actor
                 response_msg = json.dumps(msg, indent = 4)
-                print response_msg
+                print (response_msg)
 
                 
                 nr_of_devices = len(myactor_list['device'])
-                print "there are now %s devices" %nr_of_devices
+                print ("there are now %s devices" %nr_of_devices)
 
-                print myactor_list['device']
+                print (myactor_list['device'])
  
             else:
-                print "-> Device EXISTS -> update the Device"
+                print ("-> Device EXISTS -> update the Device")
                 nr = 0
                 for device in myactor_list['device']:
-                    print "---> existing device data -> %s" %device
+                    print ("---> existing device data -> %s" %device)
 
                     if device['deviceID'] == new_actor['deviceID']:
                         
                         new_actor['last_update'] = now
-                        print "Updated device -> %s" %new_actor
+                        print ("Updated device -> %s" %new_actor)
                         msg = {}
                         msg['status'] = 'updated'
                         msg['data'] = new_actor
                         response_msg = json.dumps(msg, indent = 4)
 
-                        print "===  myactor_list['device'][nr] before"
-                        print myactor_list['device'][nr]
+                        print ("===  myactor_list['device'][nr] before")
+                        print (myactor_list['device'][nr])
                         
                         myactor_list['device'][nr] = new_actor
 
-                        print "===  myactor_list['device'][nr] after "
-                        print myactor_list['device'][nr]
+                        print ("===  myactor_list['device'][nr] after ")
+                        print (myactor_list['device'][nr])
 
-                        print "Updated myactor_list with %s" %new_actor
+                        print ("Updated myactor_list with %s" %new_actor)
                     nr+=1
 
         elif new_actor["type"] == "service":
-            print "NEW data from SERVICE"
+            print ("NEW data from SERVICE")
             actor_type = 'service'
             
             # check for services if are present or not in the catalog
             if not any(service['serviceID'] == new_actor['serviceID'] for service in myactor_list['service']):
-                print "Service not present -> register new Service"
+                print ("Service not present -> register new Service")
 
 
                 new_actor['last_update'] = now
                 nr_of_services = len(myactor_list['service'])
-                print "there are now %s services" %nr_of_services
+                print ("there are now %s services" %nr_of_services)
                 
-                print "************ service added to list"
+                print ("************ service added to list")
                 myactor_list['service'].append(new_actor)
                 msg = {}
                 msg['status'] = 'registered'
                 msg['data'] = new_actor
                 response_msg = json.dumps(msg, indent = 4)
-                print response_msg
+                print (response_msg)
 
                 
                 nr_of_services = len(myactor_list['service'])
-                print "there are now %s services" %nr_of_services
+                print ("there are now %s services" %nr_of_services)
 
-                print myactor_list['service']
+                print (myactor_list['service'])
 
             else:
-                print "-> Service EXISTS -> update the Service"
+                print ("-> Service EXISTS -> update the Service")
 
                 nr = 0
                 for service in myactor_list['service']:
-                    print "---> existing service data -> %s" %service
+                    print ("---> existing service data -> %s" %service)
 
                     if service['serviceID'] == new_actor['serviceID']:
                         
                         new_actor['last_update'] = now
-                        print "Updated service -> %s" %new_actor
+                        print ("Updated service -> %s" %new_actor)
                         msg = {}
                         msg['status'] = 'updated'
                         msg['data'] = new_actor
                         response_msg = json.dumps(msg, indent = 4)
 
-                        print "===  myactor_list['service'][nr] before"
-                        print myactor_list['service'][nr]
+                        print ("===  myactor_list['service'][nr] before")
+                        print (myactor_list['service'][nr])
                         
                         myactor_list['service'][nr] = new_actor
 
-                        print "===  myactor_list['service'][nr] after "
-                        print myactor_list['service'][nr]
+                        print ("===  myactor_list['service'][nr] after ")
+                        print (myactor_list['service'][nr])
 
-                        print "Updated myactor_list with %s" %new_actor
+                        print ("Updated myactor_list with %s" %new_actor)
                     nr+=1
 
         elif new_actor["type"] == "interface":
-            print "NEW data from INTERFACE"
+            print ("NEW data from INTERFACE")
             actor_type = 'interface'
         
             # check for interfaces if are present or not in the catalog
             if not any(interface['interfaceID'] == new_actor['interfaceID'] for interface in myactor_list['interface']):
-                print "Interface not present -> register new Interface"
+                print ("Interface not present -> register new Interface")
 
 
                 new_actor['last_update'] = now
                 nr_of_interfaces = len(myactor_list['interface'])
-                print "there are now %s interfaces" %nr_of_interfaces
+                print ("there are now %s interfaces" %nr_of_interfaces)
                 
-                print "************ interface added to list"
+                print ("************ interface added to list")
                 myactor_list['interface'].append(new_actor)
                 msg = {}
                 msg['status'] = 'registered'
                 msg['data'] = new_actor
                 response_msg = json.dumps(msg, indent = 4)
-                print response_msg
+                print (response_msg)
 
                 
                 nr_of_interfaces = len(myactor_list['interface'])
-                print "there are now %s interfaces" %nr_of_interfaces
+                print ("there are now %s interfaces" %nr_of_interfaces)
 
-                print myactor_list['interface']
+                print (myactor_list['interface'])
 
             else:
-                print "-> Interface EXISTS -> update the Interface"
+                print ("-> Interface EXISTS -> update the Interface")
 
                 nr = 0
                 for interface in myactor_list['interface']:
-                    print "---> existing interface data -> %s" %interface
+                    print ("---> existing interface data -> %s" %interface)
 
                     if interface['interfaceID'] == new_actor['interfaceID']:
                         
                         new_actor['last_update'] = now
-                        print "Updated interface -> %s" %new_actor
+                        print ("Updated interface -> %s" %new_actor)
                         msg = {}
                         msg['status'] = 'updated'
                         msg['data'] = new_actor
                         response_msg = json.dumps(msg, indent = 4)
 
-                        print "===  myactor_list['interface'][nr] before"
-                        print myactor_list['interface'][nr]
+                        print ("===  myactor_list['interface'][nr] before")
+                        print (myactor_list['interface'][nr])
                         
                         myactor_list['interface'][nr] = new_actor
 
-                        print "===  myactor_list['interface'][nr] after "
-                        print myactor_list['interface'][nr]
+                        print ("===  myactor_list['interface'][nr] after ")
+                        print (myactor_list['interface'][nr])
 
-                        print "Updated myactor_list with %s" %new_actor
+                        print ("Updated myactor_list with %s" %new_actor)
                     nr+=1    
 
         return myactor_list, response_msg
@@ -286,7 +286,7 @@ class Actor_removal(Thread):
     def run(self):
         
         while True:
-            print 'removing from "%s" at every %s seconds' %(self.catalog_name, self.time_to_live)
+            print ('removing from "%s" at every %s seconds' %(self.catalog_name, self.time_to_live))
             
         
             old_catalog = open(self.catalog_name, 'r').read()
@@ -318,7 +318,7 @@ class Actor_removal(Thread):
                     difference_seconds = now - old_posix
                 
                     if difference_seconds > self.time_to_live:
-                        print "actor removed"
+                        print ("actor removed")
                         remove_list.append(actor_type[actorID])
 
             #print "to remove -------------------"
@@ -337,7 +337,7 @@ class Actor_removal(Thread):
                         # list of removed actors
                         removed_actors.append(actor_type)
 
-            print "%s actors removed" %len(removed_actors)
+            print ("%s actors removed" %len(removed_actors))
 
             old_catalog_dict['actor'] = new_list
             catalog_file = open(self.catalog_name,'w')
@@ -378,10 +378,10 @@ class IamAlive(Thread):
 
             r = requests.post(self.url, data=json.dumps(self.payload), headers=self.headers)
             
-            print "POST-> %s \n BODY: %s \n Interval: %s seconds" \
-             %(self.url, self.payload, self.interval)
+            print ("POST-> %s \n BODY: %s \n Interval: %s seconds" \
+             %(self.url, self.payload, self.interval))
     
-            print "response from the catalog: %s" %r.content
+            print ("response from the catalog: %s" %r.content)
 
             time.sleep(self.interval)
      

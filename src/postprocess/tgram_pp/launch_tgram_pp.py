@@ -8,9 +8,17 @@ and waits until Ctrl+'C' is pressed.
 
 from engine.CityManager import CityManager
 import time
-
+import requests
+import os, sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
+                                            './../../catalog/')))
+from classes import IamAlive
 
 if __name__ == "__main__":
+
+    url = 'http://0.0.0.0:8080/iamalive'
+    payload = {'type': 'service', 'serviceID': 111}
+    IamAlive(url, payload, 3)
 
     try:
         # Creating a CityManager for turin with the coordinates of a NW point
