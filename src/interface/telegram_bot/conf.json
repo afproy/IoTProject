@@ -1,0 +1,12 @@
+{
+    "catalog":
+    {
+        "URL": "http://0.0.0.0:8080/iamalive",
+        "expected_payload":
+        {
+            "type": "service",
+            "serviceID": 11
+        },
+        "interval": 3
+    }
+}
