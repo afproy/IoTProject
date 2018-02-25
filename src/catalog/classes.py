@@ -2,6 +2,7 @@ import json
 import time
 import datetime
 from threading import Thread
+import requests
 
 class Catalog_checker():
     
@@ -344,4 +345,43 @@ class Actor_removal(Thread):
             catalog_file.close()
 
             time.sleep(self.time_to_live)
+
+class IamAlive(Thread):
+    '''
+        IamAlive class will run a thread to register and update the information
+        of the actor to the catalog
+    '''
+
+    def __init__(self, url, payload, interval):
+        '''
+            Args:
+               url - url at which the POST request should be sent
+               payload - (dict) the payload to be converted into json and 
+                         embedded into body of the POST method
+               interval (int) - the time interval (seconds) to send the requests
+        '''
+
+        Thread.__init__(self)
+        self.daemon = True
+        self.url = url
+        self.payload = payload
+        self.interval = interval
+        self.headers = {'content-type': 'application/json'}
+        self.start()
+
+
+    def run(self):
+        
+        while True:
+            #print 'posting at: "%s" \n with the body: %s \n at each: %s seconds' \
+            #%(self.url, self.payload, self.interval)
+
+            r = requests.post(self.url, data=json.dumps(self.payload), headers=self.headers)
+            
+            print "POST-> %s \n BODY: %s \n Interval: %s seconds" \
+             %(self.url, self.payload, self.interval)
+    
+            print "response from the catalog: %s" %r.content
+
+            time.sleep(self.interval)
      
