@@ -107,8 +107,8 @@ class CityManager:
                              "client: %s.\nShutting down..." % (msg))
                 sys.exit()
         else:
-            logger.info("CityManager received message: %s, from topic: %s." \
-                        % (topic, msg))
+            logger.info("CityManager handles message:\n--%s,\n--from topic:" \
+                        "\n--%s.\n--Received from MQTT client." % (msg, topic))
             jsonMsg = json.loads(msg)
             if CityManager.msgComplete(jsonMsg):
                 chat_ID = jsonMsg["chat_ID"]
@@ -135,7 +135,8 @@ class CityManager:
         Args:
             user (:obj: `User`): user to notify
         """
-        print("Notifying: %s" % (str(user)))
+        logger.info("CityManager sends notification to RainBot for user " \
+                    "with chat_ID: %s!" % (str(user)))
         topic = "/Turin/" + str(user.chat_ID) + "/rainbot"
         payload = {"chat_ID": user.chat_ID, "notify": True}
         self.myPyPPEMqttClient.myPublish(topic, json.dumps(payload))
