@@ -9,16 +9,28 @@ and waits until Ctrl+'C' is pressed.
 from engine.CityManager import CityManager
 import time
 import requests
+import json
 import os, sys
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
                                             './../../catalog/')))
 from classes import IamAlive
 
 if __name__ == "__main__":
 
-    url = 'http://0.0.0.0:8080/iamalive'
-    payload = {'type': 'service', 'serviceID': 111}
-    IamAlive(url, payload, 3)
+    # Loading configuration file
+    conf = json.load(open("conf.json", "r"))
+
+    # Retrieving catalog URL to register to it
+    url = conf["catalog"]["URL"]
+    # Retrieving the payload expected by the catalog
+    payload = conf["catalog"]["expected_payload"]
+    # Retrieving the interval of time at which our actor should communicate
+    # with the catalog
+    interval = conf["catalog"]["interval"]
+    
+    # Starting 
+    IamAlive(url, payload, interval)
 
     try:
         # Creating a CityManager for turin with the coordinates of a NW point
