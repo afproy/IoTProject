@@ -14,7 +14,7 @@ class MyPublisher:
 
     def start(self):
         #manage connection to broker
-        self.mqtt_client.connect('mqtt.thingspeak.com', 1883)
+        self.mqtt_client.connect('iot.eclipse.org', 1883)
         self.mqtt_client.loop_start()
 
     def stop(self):
@@ -27,7 +27,7 @@ class MyPublisher:
 
     def myOnConnect(self, paho_mqtt, userdata, flags, rc):
         print("Connected to message broker with result code: "+ str(rc))
-
+        pass
 import datetime
 import paho.mqtt.client as mqtt
 import pandas as pd
@@ -46,9 +46,9 @@ if __name__ == "__main__":
     for i in range(len(temp)):
         timenow = time.ctime()
         print "Publishing: " + str(temp.iloc[i]) + "," + str(humi.iloc[i])
-        temp_pub.myPublish("channels/426828/publish/fields/field3/TET7BW0DX9KFMYZP", temp.iloc[i])
+        temp_pub.myPublish("temp/temp1", temp.iloc[i])
         time.sleep(30)
-        humi_pub.myPublish("channels/426828/publish/fields/field1/TET7BW0DX9KFMYZP", humi.iloc[i])
+        humi_pub.myPublish("humi/humi1", humi.iloc[i])
         time.sleep(30)
 
     temp_pub.stop()
