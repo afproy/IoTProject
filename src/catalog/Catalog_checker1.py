@@ -6,7 +6,7 @@ import datetime
 
 class Catalog_checker():
     
-    
+
     def check_actor(self, myactor_list, new_actor):
         '''
            This method checks the type of actor and register it, or updates if already registered
@@ -210,4 +210,15 @@ class Catalog_checker():
 
         print "--------------------------------------------------------"
         print "-----------------  exits check_actor()  ----------------"
-        print "--------------------------------------------------------"
+        print("--------------------------------------------------------"
+
+
+
+
+
+
+
+
+
+
+
