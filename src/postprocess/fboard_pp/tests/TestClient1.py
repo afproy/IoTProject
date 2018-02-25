@@ -19,8 +19,8 @@ if __name__ == "__main__":
     #%%
     while (True):
         a=a+1
-        test.mqtt_client.myPublish("/Turin/sensors/", json.dumps({"value": a, "unit": "u", 
+        test.mqtt_client.myPublish("/Turin/+/sensors/#", json.dumps({"value": a, "unit": "u", 
                                                                   "timestamp": "ts"}))
         time.sleep(5)
-		    
+
     test.stop()

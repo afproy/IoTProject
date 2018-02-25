@@ -13,16 +13,16 @@ from OurMQTT import OurMQTT
 import json
 
 class MySubscriber():
-    
+
     def __init__(self, clientID):
         self.clientID = clientID
         self.mqtt_client = OurMQTT(self.clientID, "iot.eclipse.org", 1883, \
                                     self)
-        
+
     def start(self):
         print("Running %s" % (self.clientID))
         self.mqtt_client.start()
-        self.mqtt_client.mySubscribe("/Turin/sensors/")
+        self.mqtt_client.mySubscribe("/Turin/+/sensors/#")
 
 
     def stop(self):
