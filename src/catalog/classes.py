@@ -4,6 +4,13 @@ import datetime
 from threading import Thread
 import requests
 
+import logging
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
+
 class Catalog_checker():
     
 
@@ -378,10 +385,10 @@ class IamAlive(Thread):
 
             r = requests.post(self.url, data=json.dumps(self.payload), headers=self.headers)
             
-            print "POST-> %s \n BODY: %s \n Interval: %s seconds" \
-             %(self.url, self.payload, self.interval)
+            logger.info("POST-> %s \n BODY: %s \n Interval: %s seconds" \
+                        % (self.url, self.payload, self.interval))
     
-            print "response from the catalog: %s" %r.content
+            logger.info("Response from the catalog: %s" % r.content)
 
             time.sleep(self.interval)
      
