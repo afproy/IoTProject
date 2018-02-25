@@ -129,8 +129,7 @@ class CityManager:
     def notifyUser(self, user):
         """ method which notifies the bot:
 
-        About the users concerned with a rain warning. For the moment it only
-        prints that it is notifying the user.
+        About the users concerned with a rain warning.
 
         Args:
             user (:obj: `User`): user to notify
