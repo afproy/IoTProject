@@ -4,7 +4,7 @@ import requests
 import time
 import datetime
 
-from Catalog_checker import *
+from classes import *
 
 
 
@@ -84,9 +84,11 @@ class Catalog_config():
 
 
         elif uri[0] == "iamalive":
-            
-            #now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-           
+            '''
+                check the actors in the catalog file and register/update them 
+                with the current time and date
+            '''
+        
             actor_dict = old_catalog_dict['actor']
             print "actor dict datatype:  %s" %type(actor_dict)
             print "new_data datatype: %s" %type(new_data_dict)
@@ -100,17 +102,17 @@ class Catalog_config():
             catalog_file.write(json.dumps(old_catalog_dict, indent=4))
             catalog_file.close()
 
-            
-        return message
-            
+            return message
 
-
-
-
-
-
+        elif uri[0] == "removeme":
+            actor_dict = old_catalog_dict['actor']
+            alive_actors, removed_actors = Catalog_checker().remove_old(actor_dict, 60)
             
 
+            old_catalog_dict['actor'] = alive_actors
+            catalog_file = open(catalog_name,'w')
+            catalog_file.write(json.dumps(old_catalog_dict, indent=4))
+            catalog_file.close()
 
 
 
@@ -121,6 +123,12 @@ if __name__ == '__main__':
             'tools.sessions.on': True,
         }
     }
+    
+    catalog_name = 'test_device.json'
+    time_to_live = 30
+    #creating a thread to remove actors that are older than 60 sec
+    Actor_removal(catalog_name, time_to_live)
+
     cherrypy.server.socket_host = '0.0.0.0'
     cherrypy.server.socket_port = 8080
     cherrypy.tree.mount (Catalog_config(), '/', conf)
