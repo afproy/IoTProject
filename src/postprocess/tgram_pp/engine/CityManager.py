@@ -4,6 +4,12 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
 from OurMQTT import OurMQTT
 from engine.space.City import City
 import json
+import logging
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
 
 class CityManager:
     """ Class CityManager:
@@ -38,8 +44,9 @@ class CityManager:
                 Neighborhood at which a notification to the users with their
                 umbrella closed need to be sent
         """
+        logger.info("Initiating CityManager!")
         self.clientID = clientID
-        self.myPyPPEMqttClient = OurMQTT("PyPPEngine", "iot.eclipse.org", \
+        self.myPyPPEMqttClient = OurMQTT("TGramPPEngine", "iot.eclipse.org", \
                                            1883, self)
         self.myCity = City(self.clientID, nwLat, nwLong, seLat, seLong, n, \
                            threshold)
@@ -51,16 +58,16 @@ class CityManager:
         By starting its MQTT client it allows it to receive the messages of the
         topic it has subscribed to.
         """
-        print("Starting to manage %s's parc of umbrellas!" % (self.clientID))
         self.myPyPPEMqttClient.start()
+        logger.info("CityManager now operating %s's parc of umbrellas!" \
+                    % (self.clientID))
 
 
     def rest(self):
         """ CityManager stops managing its city by stopping its MQTT client.
         """
-        print("Finishing management of %s's parc of umbrellas!" \
-              %(self.clientID))
         self.myPyPPEMqttClient.stop()
+        logger.info("CityManager has correctly shut down!")
 
 
     def notify(self, bError, topic, msg):
@@ -96,14 +103,12 @@ class CityManager:
         """
         if bError:
             if topic == "connection":
-                print("/!\ Connection error of CityManager's MQTT client: %s" \
-                      % (msg))
-                print("Shutting down...")
+                logger.error("/!\ Connection error of CityManager's MQTT " \
+                             "client: %s.\nShutting down..." % (msg))
                 sys.exit()
         else:
-            print("------------")
-            print("Topic: %s" % (topic))
-            print("Message: %s" % (msg))
+            logger.info("CityManager received message: %s, from topic: %s." \
+                        % (topic, msg))
             jsonMsg = json.loads(msg)
             if CityManager.msgComplete(jsonMsg):
                 chat_ID = jsonMsg["chat_ID"]
@@ -118,7 +123,7 @@ class CityManager:
                         for u in usersToBeNotified:
                             self.notifyUser(u)
                     return
-            print("Bad format of the JSON!")
+            logger.warning("Bad format of the JSON received by CityManager!")
 
 
     def notifyUser(self, user):
