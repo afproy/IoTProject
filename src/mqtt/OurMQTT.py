@@ -1,4 +1,10 @@
 import paho.mqtt.client as MQTT
+import logging
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
 
 class OurMQTT:
     """ Class OurMQTT:
@@ -51,6 +57,7 @@ class OurMQTT:
         self.mqtt_client.on_connect = self.myOnConnect
         self.mqtt_client.on_disconnect = self.myOnDisconnect
         self.mqtt_client.on_message = self.myOnMessage
+        logger.info("Initiating MQTT client %s!" % (self.clientID))
 
 
     def myOnConnect(self, mqtt_client, userdata, flags, rc):
@@ -71,7 +78,8 @@ class OurMQTT:
         errMsg = ""
 
         if rc == 0:
-            print(self.clientID + " successfully connected to broker!")
+            logger.info("MQTT client %s successfully connected to broker!" \
+                        % (self.clientID))
             return
 
         # If we go through this we had a problem with the connection phase
@@ -91,7 +99,8 @@ class OurMQTT:
         else:
             errMsg = "/!\ " + self.clientID + " connection to broker was " \
                      "refused for unknown reasons!"
-        print(errMsg)
+        logger.error(errMsg)
+
         # Stopping the loop
         self.mqtt_client.loop_stop()
 
@@ -115,10 +124,11 @@ class OurMQTT:
             rc (int): result code
         """
         if rc == 0:
-            print(self.clientID + " successfully disconnected!")
+            logger.info("MQTT client %s successfully disconnected!" \
+                        % (self.clientID))
         else:
-            print("Unexpected disconnection of " + self.clientID + "." \
-                  " Reconnecting right away!")
+            logger.warning("Unexpected disconnection of MQTT client %s. " \
+                           "Reconnecting right away!" % (self.clientID))
             # The reconnection is performed automatically by our client since
             # we're using loop_start() so no need to manually tell our client
             # to reconnect.
@@ -136,6 +146,8 @@ class OurMQTT:
             msg (:obj: MQTTMessage): message sent by the broker
         """
         # A new message is received
+        logger.info("MQTT client %s received a message %s on topic %s."
+                    % (self.clientID, msg.topic, msg.payload))
         self.notifier.notify(False, msg.topic, msg.payload.decode("utf-8", \
                                                                   "ignore"))
 
@@ -151,7 +163,8 @@ class OurMQTT:
             msg (str): message you wish to publish
             qos (int, optional): desired QoS, default to 2
         """
-        print ("%s publishing %s with topic %s" % (self.clientID, msg, topic))
+        logger.info("MQTT client %s publishing %s with topic %s."\
+                    % (self.clientID, msg, topic))
         # publish a message with a certain topic
         self.mqtt_client.publish(topic, msg, qos)
 
@@ -166,9 +179,9 @@ class OurMQTT:
             topic (str): topic to which you desire to subscribe
             qos (int, optional): desired QoS, default to 2
         """
-        print("%s subscribing to %s" % (self.clientID, topic))
         # Subscribing to a topic
         self.mqtt_client.subscribe(topic, qos)
+        logger.info("MQTT client %s subscribed to %s." % (self.clientID, topic))
         # Remembering that our client is a subscriber
         self.isSubscriber = True
         self.topic = topic
@@ -184,6 +197,7 @@ class OurMQTT:
         self.mqtt_client.connect(self.broker , self.port)
         # Starting the loop to start receiving messages from the broker
         self.mqtt_client.loop_start()
+        logger.info("MQTT client %s is now operational!" % (self.clientID))
 
 
     def stop(self):
@@ -195,8 +209,11 @@ class OurMQTT:
         if self.isSubscriber:
             # Unsubscribing from topic
             self.mqtt_client.unsubscribe(self.topic)
+            logger.info("MQTT client %s unsubscribed from topic %s." \
+                        % (self.clientID, self.topic))
 
         # Stopping the loop
         self.mqtt_client.loop_stop()
         # Finaly, disconnecting the client from the broker
         self.mqtt_client.disconnect()
+        logger.info("MQTT client %s has correctly shut down!" % (self.clientID))
