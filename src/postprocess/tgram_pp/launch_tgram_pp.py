@@ -29,7 +29,7 @@ if __name__ == "__main__":
     # with the catalog
     interval = conf["catalog"]["interval"]
     
-    # Starting 
+    # Starting to send registration messages to catalog
     IamAlive(url, payload, interval)
 
     try:
