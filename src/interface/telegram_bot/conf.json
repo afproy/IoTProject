@@ -24,6 +24,15 @@
         {
             "URI": "next_actor?",
             "params": ["type, ID"]
+        },
+
+        "broker":
+        {
+            "URI": "broker_info",
+            "headers":
+            {
+                "content-type": "application/json"
+            }  
         }
     }
 }

@@ -16,27 +16,25 @@ import os, sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
                                             './../../catalog/')))
 from classes import IamAlive
+from util import *
 
 if __name__ == '__main__':
 
     # Loading configuration file
     conf = json.load(open("conf.json", "r"))
 
-    # Retrieving catalog URL to register to it
-    url = conf["catalog"]["URL"] + conf["catalog"]["registration"]["URI"]
-    # Retrieving the payload expected by the catalog
-    payload = conf["catalog"]["registration"]["expected_payload"]
-    # Retrieving the interval of time at which our actor should communicate
-    # with the catalog
-    interval = conf["catalog"]["registration"]["interval"]
+    # 1) Perform registration to catalog by creating dedicated thread
+    registration(conf)
 
-    # Starting to send registration messages to catalog
-    IamAlive(url, payload, interval)
+    # 2) Retrieve information regarding broker
+    broker_host, broker_port = getBroker(conf)
+
+    # 3) Ask for information about next actor
 
     try:
         topic = conf["catalog"]["registration"]["expected_payload"] \
                     ["requirements"]["topics"][0]
-        myBotManager = BotManager()
+        myBotManager = BotManager(broker_host, broker_port)
         myBotManager.manage()
         myBotManager.myMqttClient.mySubscribe(topic)
 
