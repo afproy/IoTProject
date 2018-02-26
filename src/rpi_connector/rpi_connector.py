@@ -5,6 +5,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './../ca
 #from MyPublisher import MyPublisher
 #from sensors import *
 
+from util import *
+
 from pubThread import *
 import cherrypy
 import json
@@ -48,27 +50,18 @@ class PiServer():
 
 if __name__ == '__main__':
 
-
-
-
-
-
-    # registration
-    # get next actor
-    # get broker
-
-
-
-
     file_conf=open('conf.json','r')
     rpi_conf=json.load(file_conf)
 
-    host = rpi_conf['catalog']['registration']['requirements']['host']
-    port = rpi_conf['catalog']['registration']['requirements']['port']
+    # registration
+    registration(rpi_conf)
+    # get next actor
+    # get broker
 
-    url = rpi_conf['catalog']['url']
+    host = rpi_conf['catalog']['registration']['expected_payload']['requirements']['host']
+    port = rpi_conf['catalog']['registration']['expected_payload']['requirements']['port']
 
-    registration(file_conf)
+    url = rpi_conf['catalog']['URL']
 
     file_conf.close()
 
@@ -87,7 +80,7 @@ if __name__ == '__main__':
         print "chatID = %s" %chatID
         print "location = %s" %location
         
-        PublishTH('localhost', 1883, topics, location, chatID )
+        PublishTH('iot.eclipse.org', 1883, topics, location, chatID )
 
 
     
