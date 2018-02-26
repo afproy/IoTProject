@@ -27,7 +27,11 @@
             {
                 "type": "device",
                 "ID": "RPIi"
-            }
+            },
+            "headers":
+            {
+                "content-type": "application/json"
+            } 
         },
 
         "broker":

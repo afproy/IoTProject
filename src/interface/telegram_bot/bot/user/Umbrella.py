@@ -1,9 +1,10 @@
 import logging
 import requests
+import os, sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
-                                            './../../catalog/')))
-from util import getNextActorRequirements
+                                            './../../../../catalog/')))
+from util import *
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -53,7 +54,7 @@ class Umbrella:
         # Loading configuration file
         conf = json.load(open("conf.json", "r"))
 
-        conf["next_actor"]["ID"] = self.id
+        conf["catalog"]["next_actor"]["params"]["ID"] = self.id
 
         req = getNextActorRequirements(conf)
 
@@ -62,13 +63,14 @@ class Umbrella:
                          "next actor has changed. Assistance required!")
             return
         else:
-            self.rPIURL = "http://" + req["host"] + ":" + req["port"] + "/"
-            self.rPIURI = req["uri"]
+            self.rPIURL = "http://" + req["host"] + ":" + str(req["port"]) \
+                          + "/"
+            self.rPIURI = req["URI"]
 
         logger.info("Sending POST request to the umbrella to pair "\
                     "umbrella_ID: %s to chat_ID: %s." % (self.id, chat_ID))
-        url = self.rPIURL + self.rPIURI["pair_chatID"]
-        payload = {"chat_ID": chat_ID}
+        url = self.rPIURL + self.rPIURI[0]
+        payload = {"chatID": chat_ID}
         r = requests.post(url, headers=Umbrella.headers, \
                           data=json.dumps(payload))
 
@@ -97,8 +99,8 @@ class Umbrella:
         """
         logger.info("Sending POST request to the umbrella to set/update " \
                     "location of user with chat_ID %s." % (chat_ID))
-        url = self.rPIURL + self.rPIURI["set_location"]
-        payload = { "chat_ID": chat_ID, \
+        url = self.rPIURL + self.rPIURI[1]
+        payload = { "chatID": chat_ID, \
                     "location": { "latitude": location.latitude, \
                                   "longitude": location.longitude}}
         r = requests.post(url, headers=Umbrella.headers, \
