@@ -47,7 +47,6 @@ class PublishTH(threading.Thread):
             payload_telegram['status'] = 1 # state of the button
 
             payload_TH_status = {}
-            payload_TH_status['unit'] = 'open/closed'
             payload_TH_status['type'] = 'button'
             payload_TH_status['value'] = 'open' # reading temp from button
 
@@ -72,7 +71,17 @@ class PublishTH(threading.Thread):
             print self.location
             print "-------------------"
 
-
-            self.rpi_pub.start()
-            self.rpi_pub.mqtt_client.myPublish(self.topic, "payload_telegram")
+            t = 15
+            h = 30
+            
+            # simulating the reading of button 
+            x = int(raw_input("what is the button state? \n"))
             time.sleep(1)
+            if x == 1:
+                print "publishing"
+                self.rpi_pub.start()
+                self.rpi_pub.mqtt_client.myPublish(self.topic, "payload_telegram")
+            elif x == 0:
+                print "waiting for button to be pressed"
+                time.sleep(1)
+            
