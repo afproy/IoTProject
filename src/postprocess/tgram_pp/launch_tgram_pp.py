@@ -28,7 +28,8 @@ if __name__ == "__main__":
     # 2) Retrieve information regarding broker
     broker_host, broker_port = getBroker(conf)
 
-    # 3) Ask for information about next actor    
+    # 3) Ask for information about next actor
+    next_actor_requirements = getNextActorRequirements(conf)
 
     try:
         # Creating a CityManager for turin with the coordinates of a NW point
@@ -40,9 +41,10 @@ if __name__ == "__main__":
         confCM = conf["CityManager"]
         coord = confCM["coordinates"]
         TurinManager = CityManager(confCM["name"], broker_host, broker_port, \
-                                   coord["nwLat"], coord["nwLong"], \
-                                   coord["seLat"], coord["seLong"], \
-                                   confCM["n"], confCM["threshold"])
+                                   next_actor_requirements, coord["nwLat"], \
+                                   coord["nwLong"], coord["seLat"], \
+                                   coord["seLong"], confCM["n"], \
+                                   confCM["threshold"])
         TurinManager.manage()
         TurinManager.myPyPPEMqttClient.mySubscribe(topic)
 
