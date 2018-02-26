@@ -24,7 +24,29 @@
         {
             "URI": "next_actor?",
             "params": ["type, ID"]
-        }
-    }
+        },
 
+        "broker":
+        {
+            "URI": "broker_info",
+            "headers":
+            {
+                "content-type": "application/json"
+            }  
+        }
+    },
+
+    "CityManager":
+    {
+        "name": "Turin",
+        "coordinates":
+        {
+            "nwLat": 45.106234,
+            "nwLong": 7.619275,
+            "seLat": 45.024758,
+            "seLong": 7.719869
+        },
+        "n": 4,
+        "threshold": 2
+    }
 }

@@ -26,7 +26,8 @@ class CityManager:
         myCity (:obj: City): the City to manage
     """
 
-    def __init__(self, clientID, nwLat, nwLong, seLat, seLong, n, threshold):
+    def __init__(self, clientID, broker_host, broker_port, nwLat, nwLong, \
+                 seLat, seLong, n, threshold):
         """ Constructor of CityManager:
 
         Initializes the attributes of the class. To do so it creates an instance
@@ -34,6 +35,8 @@ class CityManager:
 
         Args:
             clientID (str): of the city to manage
+            broker_host (str): broker's URL
+            broker_port (int): broker's port
             nwLat (float): latitude of the North West point
             nwLong (float): longitude of the North West point
             seLat (float): latitude of the South East point
@@ -46,8 +49,8 @@ class CityManager:
         """
         logger.info("Initiating CityManager!")
         self.clientID = clientID
-        self.myPyPPEMqttClient = OurMQTT("TGramPPEngine", "iot.eclipse.org", \
-                                           1883, self)
+        self.myPyPPEMqttClient = OurMQTT("TGramPPEngine", broker_host, \
+                                         broker_port, self)
         self.myCity = City(self.clientID, nwLat, nwLong, seLat, seLong, n, \
                            threshold)
 

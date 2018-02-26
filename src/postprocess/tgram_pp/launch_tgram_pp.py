@@ -15,22 +15,20 @@ import os, sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
                                             './../../catalog/')))
 from classes import IamAlive
+from util import *
 
 if __name__ == "__main__":
 
     # Loading configuration file
     conf = json.load(open("conf.json", "r"))
 
-    # Retrieving catalog URL to register to it
-    url = conf["catalog"]["URL"] + conf["catalog"]["registration"]["URI"]
-    # Retrieving the payload expected by the catalog
-    payload = conf["catalog"]["registration"]["expected_payload"]
-    # Retrieving the interval of time at which our actor should communicate
-    # with the catalog
-    interval = conf["catalog"]["registration"]["interval"]
-    
-    # Starting to send registration messages to catalog
-    IamAlive(url, payload, interval)
+    # 1) Perform registration to catalog by creating dedicated thread
+    registration(conf)
+
+    # 2) Retrieve information regarding broker
+    broker_host, broker_port = getBroker(conf)
+
+    # 3) Ask for information about next actor    
 
     try:
         # Creating a CityManager for turin with the coordinates of a NW point
@@ -39,7 +37,12 @@ if __name__ == "__main__":
         # warning is sent is set to 2
         topic = conf["catalog"]["registration"]["expected_payload"] \
                     ["requirements"]["topics"][0]
-        TurinManager = CityManager("Turin", 45.106234, 7.619275, 45.024758, 7.719869, 4, 2)
+        confCM = conf["CityManager"]
+        coord = confCM["coordinates"]
+        TurinManager = CityManager(confCM["name"], broker_host, broker_port, \
+                                   coord["nwLat"], coord["nwLong"], \
+                                   coord["seLat"], coord["seLong"], \
+                                   confCM["n"], confCM["threshold"])
         TurinManager.manage()
         TurinManager.myPyPPEMqttClient.mySubscribe(topic)
 
