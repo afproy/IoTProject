@@ -1,9 +1,23 @@
 {
-    "broker": "iot.eclipse.org",
+    "broker": {
+        "host": "iot.eclipse.org", 
+        "port": 1883
+    }, 
     "actor": {
-        "device": [],
-        "interface": [],
-        "service": []
-    },
-    "port": 1883
+        "device": [], 
+        "interface": [], 
+        "service": [
+            {
+                "type": "service", 
+                "serviceID": "tgram_pp", 
+                "requirements": {
+                    "access": "MQTT", 
+                    "topics": [
+                        "/Turin/+/notifications"
+                    ]
+                }, 
+                "last_update": "2018-02-26 19:13:44"
+            }
+        ]
+    }
 }

@@ -1,6 +1,7 @@
 import paho.mqtt.client as PahoMQTT
 import time
 import requests
+import sys, os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
                                             './../../catalog/')))
@@ -28,7 +29,8 @@ class MySubscriber:
 			self._paho_mqtt.connect(self.broker_host, self.broker_port)
 			self._paho_mqtt.loop_start()
 
-			self._paho_mqtt.subscribe([(self.topics[0], 2), (self.topics[1], 2)])
+			self._paho_mqtt.subscribe([(self.topics[0], 2), \
+									   (self.topics[1], 2)])
 
 		def stop (self):
 			self._paho_mqtt.unsubscribe(self.topics)
@@ -40,7 +42,8 @@ class MySubscriber:
 
 		def myOnMessageReceived (self, paho_mqtt , userdata, msg):
 
-			print ("Topic:'" + msg.topic +"', QoS: '"+str(msg.qos)+"' Message: '"+str(msg.payload) + "'\n")
+			print ("Topic:'" + msg.topic + "', QoS: '" + str(msg.qos) + \
+				   "' Message: '"+str(msg.payload) + "'\n")
 			#if the topic is Temperature it writes in field2
 			str_temp = self.topics[0].split("/")
 			str_humi = self.topics[1].split("/")
@@ -62,7 +65,7 @@ class MySubscriber:
 					self.ts_params[1]: float(msg.payload)
 				}
 
-			result = requests.get(self.thingspeak_url, params=params)
+			result = requests.get(self.ts_url, params=params)
 
 
 
@@ -80,9 +83,10 @@ if __name__ == "__main__":
 	ts = conf["thingspeak"]
 
 	topics = conf["catalog"]["registration"]["expected_payload"] \
-		["requirements"]["topics"]
+				 ["requirements"]["topics"]
 
-	ts_adaptor_sub = MySubscriber("ts_adaptor_subscriber",broker_host,broker_port, topics, ts)
+	ts_adaptor_sub = MySubscriber("ts_adaptor_subscriber", broker_host, \
+								  broker_port, topics, ts)
 
 	ts_adaptor_sub.start()
 
