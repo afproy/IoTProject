@@ -2,9 +2,9 @@ import os, sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './../mqtt/')))
 from OurMQTT import OurMQTT
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './../catalog/')))
-from classes import IamAlive
 #from MyPublisher import MyPublisher
 #from sensors import *
+
 from pubThread import *
 import cherrypy
 import json
@@ -63,12 +63,12 @@ if __name__ == '__main__':
     file_conf=open('conf.json','r')
     rpi_conf=json.load(file_conf)
 
-    host = rpi_conf['payload']['requirements']['host']
-    port = rpi_conf['payload']['requirements']['port']
+    host = rpi_conf['catalog']['registration']['requirements']['host']
+    port = rpi_conf['catalog']['registration']['requirements']['port']
 
-    url = rpi_conf['catalog_url']
-    payload = rpi_conf['payload']
-    refresh_rate = rpi_conf['refresh_rate']
+    url = rpi_conf['catalog']['url']
+
+    registration(file_conf)
 
     file_conf.close()
 
