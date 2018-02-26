@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# -*- coding: utf-8 -*-
+
 """ Module providing utility functions to access catalog:
 
 - to register
