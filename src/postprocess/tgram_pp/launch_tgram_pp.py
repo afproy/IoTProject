@@ -14,7 +14,7 @@ import os, sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
                                             './../../catalog/')))
-from classes import IamAlive
+
 from util import *
 
 if __name__ == "__main__":
