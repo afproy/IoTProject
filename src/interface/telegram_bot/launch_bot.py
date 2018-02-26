@@ -29,8 +29,6 @@ if __name__ == '__main__':
     # 2) Retrieve information regarding broker
     broker_host, broker_port = getBroker(conf)
 
-    # 3) Ask for information about next actor
-
     try:
         topic = conf["catalog"]["registration"]["expected_payload"] \
                     ["requirements"]["topics"][0]

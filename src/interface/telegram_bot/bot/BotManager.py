@@ -3,6 +3,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
                                             './../../../mqtt/')))
 from OurMQTT import OurMQTT
 from bot.RainBot import RainBot
+from bot.usr.Umbrella import Umbrella
 import json
 import logging
 

@@ -22,8 +22,12 @@
 
         "next_actor":
         {
-            "URI": "next_actor?",
-            "params": ["type, ID"]
+            "URI": "next_actor",
+            "params":
+            {
+                "type": "device",
+                "ID": "RPIi"
+            }
         },
 
         "broker":
