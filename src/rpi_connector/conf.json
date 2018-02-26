@@ -1,25 +1,31 @@
 {
-    "catalog":
-    {
-        "URL": "http://0.0.0.0:8080/",
+	"catalog": {
+		"URL": "http://0.0.0.0:8080/",
 
-        "registration":
-        {
-            "URI": "iamalive", 
-            "expected_payload":
-            {
-                "type": "device",
-                "deviceID": "RPI_1",
-                "requirements": {
-                    "access": "REST",
-                    "host": "localhost",
-                    "port": 8090,
-                    "uri": [
-                        "pair_chatID", 
-                        "set_location"
-                    ]
-            },
+		"registration": {
+			"URI": "iamalive",
+			"expected_payload": {
+				"type": "device",
+				"deviceID": "RPI_1",
+				"requirements": {
+					"access": "REST",
+					"host": "localhost",
+					"port": 8090,
+					"URI": [
+						"pair_chatID",
+						"set_location"
+					]
+				}
+
+			},
             "interval": 120
-        }
-    }
+		}
+	},
+
+	"broker": {
+		"URI": "broker_info",
+		"headers": {
+		"content-type": "application/json"
+		}
+	}
 }
