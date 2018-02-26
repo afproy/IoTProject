@@ -11,7 +11,7 @@
                 "type": "device",
                 "deviceID": "RPI_1",
                 "requirements": {
-                    "access": "rest",
+                    "access": "REST",
                     "host": "localhost",
                     "port": 8090,
                     "uri": [
