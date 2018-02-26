@@ -1,0 +1,107 @@
+import os, sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './../mqtt/')))
+from OurMQTT import OurMQTT
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './../catalog/')))
+from classes import IamAlive
+#from MyPublisher import MyPublisher
+#from sensors import *
+from pubThread import *
+import cherrypy
+import json
+import time
+
+chatID = None
+location = None
+
+class PiServer():
+    exposed = True
+
+
+    def GET(self, *uri, **params):
+        pass
+        
+
+    def POST(self, *uri, **params):
+        #receive chatID and location from tgram (AlexP)
+        body_payload = cherrypy.request.body.read()
+        new_data_dict = json.loads(body_payload)
+        global chatID
+        global location
+
+        if uri[0] == 'pair_chatID':
+            
+            print "chatID = %s" %chatID
+            chatID = new_data_dict['chatID']
+            print "chatID = %s" %chatID
+
+        elif uri[0] == 'set_location':
+            
+            print "location = %s" %location
+            location = new_data_dict['location']
+            print "location = %s" %location 
+
+        if ((chatID != None) and (location != None)):
+            print "==========ready to start the thread=========="
+            start_thread()
+
+
+if __name__ == '__main__':
+
+
+
+
+
+
+    # registration
+    # get next actor
+    # get broker
+
+
+
+
+    file_conf=open('conf.json','r')
+    rpi_conf=json.load(file_conf)
+
+    host = rpi_conf['payload']['requirements']['host']
+    port = rpi_conf['payload']['requirements']['port']
+
+    url = rpi_conf['catalog_url']
+    payload = rpi_conf['payload']
+    refresh_rate = rpi_conf['refresh_rate']
+
+    file_conf.close()
+
+
+
+    
+    
+    #IamAlive(url, payload, refresh_rate)
+    
+    def start_thread():
+        global chatID
+        global location
+
+        print "i will start the thread"
+        print "chatID = %s" %chatID
+        print "location = %s" %location
+
+        PublishTH('localhost', 1883, 'test/rpi/pub',location, chatID )
+
+
+    
+    conf = {
+        '/': {
+            'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
+            'tools.sessions.on': True,
+        }
+    }
+
+    
+    cherrypy.server.socket_host = host
+    cherrypy.server.socket_port = port
+    cherrypy.tree.mount (PiServer(), '/', conf)
+    cherrypy.engine.start()
+    cherrypy.engine.block()
+
+
+

@@ -1,0 +1,18 @@
+{
+    "catalog_url": "http://0.0.0.0:8080/iamalive",
+    "payload": {
+        "type": "device",
+        "deviceID": "RPI_1",
+        "requirements": {
+            "access": "rest",
+            "host": "localhost",
+            "port": 8090,
+            "uri": [
+                "pair_umbrella", 
+                "set_location"
+            ]
+        }
+
+    },
+    "refresh_rate": 5
+}
