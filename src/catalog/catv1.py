@@ -61,6 +61,9 @@ class Catalog_config():
             return open('catalog.json')
         if uri[0] == 'print_catalog':
             return Catalog_manager('catalog.json').print_catalog_WS()
+        elif uri[0] == 'broker_info':
+            catalog = json.load(open('test_device.json', 'r'))
+            return json.dumps(catalog['broker'])
 
 
         

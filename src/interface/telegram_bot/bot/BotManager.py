@@ -25,15 +25,15 @@ class BotManager:
             Telegram bot
     """
 
-    def __init__(self):
+    def __init__(self, broker_host, broker_port):
         """ Constructor of BotManager:
 
         Creates instances of OurMQTT client and of RainBot for the its
         attributes.
         """
         logger.info("Initiating BotManager!")
-        self.myMqttClient = OurMQTT("BotManager", "iot.eclipse.org", \
-                                    1883, self)
+        self.myMqttClient = OurMQTT("BotManager", broker_host, broker_port, \
+                                    self)
         self.myRainBot = RainBot()
 
 
