@@ -1,12 +1,29 @@
 {
     "catalog":
     {
-        "URL": "http://0.0.0.0:8080/iamalive",
-        "expected_payload":
+        "URL": "http://0.0.0.0:8080/",
+
+        "registration":
         {
-            "type": "service",
-            "serviceID": 11
+            "URI": "iamalive", 
+            "expected_payload":
+            {
+                "type": "interface",
+                "interfaceID": "rainbot",
+                "requirements":
+                {
+                    "access": "MQTT",
+                    "topics": ["/Turin/+/rainbot"]
+                }
+
+            },
+            "interval": 120
         },
-        "interval": 3
+
+        "next_actor":
+        {
+            "URI": "next_actor?",
+            "params": ["type, ID"]
+        }
     }
 }
