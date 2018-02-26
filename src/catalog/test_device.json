@@ -5,19 +5,19 @@
     }, 
     "actor": {
         "device": [], 
-        "interface": [], 
-        "service": [
+        "interface": [
             {
-                "type": "service", 
-                "serviceID": "tgram_pp", 
+                "interfaceID": "rainbot", 
                 "requirements": {
                     "access": "MQTT", 
                     "topics": [
-                        "/Turin/+/notifications"
+                        "/Turin/+/rainbot"
                     ]
                 }, 
-                "last_update": "2018-02-26 19:13:44"
+                "type": "interface", 
+                "last_update": "2018-02-26 20:46:45"
             }
-        ]
+        ], 
+        "service": []
     }
 }
