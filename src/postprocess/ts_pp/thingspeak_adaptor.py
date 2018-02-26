@@ -1,70 +1,95 @@
 import paho.mqtt.client as PahoMQTT
 import time
 import requests
+import sys, os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
+                                            './../../catalog/')))
+from util import *
 
 class MySubscriber:
-		def __init__(self, clientID):
+		def __init__(self, clientID, broker_host, broker_port, topics, ts):
 			self.clientID = clientID
-			# create an instance of paho.mqtt.client
+
 			self._paho_mqtt = PahoMQTT.Client(clientID, False) 
 
-			# register the callback
 			self._paho_mqtt.on_connect = self.myOnConnect
 			self._paho_mqtt.on_message = self.myOnMessageReceived
 
-			self.topic1 = 'temp/temp1'
-			self.topic2 = 'humi/humi1'
+			self.broker_host = broker_host
+			self.broker_port = broker_port
+			self.topics = topics
+			self.ts_url = ts["URL"]
+			self.ts_writeapikey = ts["writeapikey"]
+			self.ts_params = ts["params"]
 
 
 		def start (self):
-			#manage connection to broker
-			self._paho_mqtt.connect('iot.eclipse.org', 1883)
+
+			self._paho_mqtt.connect(self.broker_host, self.broker_port)
 			self._paho_mqtt.loop_start()
-			# subscribe for a topic
-			self._paho_mqtt.subscribe(self.topic1, 2)
-			self._paho_mqtt.subscribe(self.topic2, 2)
+
+			self._paho_mqtt.subscribe([(self.topics[0], 2), \
+									   (self.topics[1], 2)])
 
 		def stop (self):
-			self._paho_mqtt.unsubscribe(self.topic)
+			self._paho_mqtt.unsubscribe(self.topics)
 			self._paho_mqtt.loop_stop()
 			self._paho_mqtt.disconnect()
 
 		def myOnConnect (self, paho_mqtt, userdata, flags, rc):
 			print ("Connected to message broker with result code: "+str(rc))
-                pass
 
 		def myOnMessageReceived (self, paho_mqtt , userdata, msg):
 
-			print ("Topic:'" + msg.topic+"', QoS: '"+str(msg.qos)+"' Message: '"+str(msg.payload) + "'\n")
+			print ("Topic:'" + msg.topic + "', QoS: '" + str(msg.qos) + \
+				   "' Message: '"+str(msg.payload) + "'\n")
+			#if the topic is Temperature it writes in field2
+			str_temp = self.topics[0].split("/")
+			str_humi = self.topics[1].split("/")
 
-			if msg.topic == self.topic1:
+			topic = msg.topic.split("/")
 
-				writeapikey = 'TET7BW0DX9KFMYZP'
-				url = 'https://api.thingspeak.com/update.json?'
+
+			if topic[-1] == str_temp[-1]:
+
 				params = {
-					"api_key" : writeapikey,
-					"field2" : float(msg.payload)
+					self.ts_params[0] : self.ts_writeapikey,
+					self.ts_params[2] : float(msg.payload)
 				}
 
-			elif msg.topic == self.topic2:
+			elif topic[-1] == str_humi[-1]:
 
-				writeapikey = 'TET7BW0DX9KFMYZP'
-				url = 'https://api.thingspeak.com/update.json?'
 				params = {
-					"api_key": writeapikey,
-					"field1": float(msg.payload)
+					self.ts_params[0]: self.ts_writeapikey,
+					self.ts_params[1]: float(msg.payload)
 				}
 
-			result = requests.get(url, params)
+			result = requests.get(self.ts_url, params=params)
 
 
 
 if __name__ == "__main__":
-	temp_sub = MySubscriber("MySubscriber 1")
-	humi_sub = MySubscriber("MySubscriber 2")
+	# Loading configuration file
+	conf = json.load(open("conf.json", "r"))
 
-	temp_sub.start()
-	humi_sub.start()
+	# 1) Perform registration to catalog by creating dedicated thread
+	registration(conf)
+
+	# 2) Retrieve information regarding broker
+	broker_host, broker_port = getBroker(conf)
+
+	# 3) Ask for information about next actor
+	ts = conf["thingspeak"]
+
+	topics = conf["catalog"]["registration"]["expected_payload"] \
+				 ["requirements"]["topics"]
+
+	ts_adaptor_sub = MySubscriber("ts_adaptor_subscriber", broker_host, \
+								  broker_port, topics, ts)
+
+	ts_adaptor_sub.start()
+
 	while True:
 		time.sleep(1)
 
