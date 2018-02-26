@@ -27,7 +27,6 @@ class MyPublisher:
 
     def myOnConnect(self, paho_mqtt, userdata, flags, rc):
         print("Connected to message broker with result code: "+ str(rc))
-        pass
 
 import datetime
 import paho.mqtt.client as mqtt
@@ -46,10 +45,10 @@ if __name__ == "__main__":
 
     for i in range(len(temp)):
         timenow = time.ctime()
-        print "Publishing: " + str(temp.iloc[i]) + "," + str(humi.iloc[i])
-        temp_pub.myPublish("temp/temp1", temp.iloc[i])
+        print("Publishing: " + str(temp.iloc[i]) + "," + str(humi.iloc[i]))
+        temp_pub.myPublish("/Turin/1234/sensors/temperature", temp.iloc[i])
         time.sleep(30)
-        humi_pub.myPublish("humi/humi1", humi.iloc[i])
+        humi_pub.myPublish("/Turin/1234/sensors/humidity", humi.iloc[i])
         time.sleep(30)
 
     temp_pub.stop()
