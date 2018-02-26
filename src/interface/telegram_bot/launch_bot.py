@@ -23,20 +23,22 @@ if __name__ == '__main__':
     conf = json.load(open("conf.json", "r"))
 
     # Retrieving catalog URL to register to it
-    url = conf["catalog"]["URL"]
+    url = conf["catalog"]["URL"] + conf["catalog"]["registration"]["URI"]
     # Retrieving the payload expected by the catalog
-    payload = conf["catalog"]["expected_payload"]
+    payload = conf["catalog"]["registration"]["expected_payload"]
     # Retrieving the interval of time at which our actor should communicate
     # with the catalog
-    interval = conf["catalog"]["interval"]
+    interval = conf["catalog"]["registration"]["interval"]
 
     # Starting to send registration messages to catalog
     IamAlive(url, payload, interval)
 
     try:
+        topic = conf["catalog"]["registration"]["expected_payload"] \
+                    ["requirements"]["topics"][0]
         myBotManager = BotManager()
         myBotManager.manage()
-        myBotManager.myMqttClient.mySubscribe("/Turin/+/rainbot")
+        myBotManager.myMqttClient.mySubscribe(topic)
 
         while True:
             time.sleep(0.5)
