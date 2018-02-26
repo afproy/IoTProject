@@ -63,6 +63,9 @@ class Catalog_config():
             return Catalog_manager('catalog.json').print_catalog_WS()
 
 
+        
+
+
     def POST(self,*uri,**params):
         '''
             The method is used to update the information in the catalog.json file
@@ -117,6 +120,17 @@ class Catalog_config():
 
 
 if __name__ == '__main__':
+
+    file_conf=open('conf.json','r')
+    catalog_conf=json.load(file_conf)
+    catalog_name=catalog_conf['catalog']
+    time_to_live=catalog_conf['time_to_live']
+    host = catalog_conf['host']
+    port = catalog_conf['port']
+    file_conf.close()
+    
+    
+    # configurations for cherrypy
     conf = {
         '/': {
             'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
@@ -124,13 +138,11 @@ if __name__ == '__main__':
         }
     }
     
-    catalog_name = 'test_device.json'
-    time_to_live = 30
     #creating a thread to remove actors that are older than 60 sec
     Actor_removal(catalog_name, time_to_live)
 
-    cherrypy.server.socket_host = '0.0.0.0'
-    cherrypy.server.socket_port = 8080
+    cherrypy.server.socket_host = host
+    cherrypy.server.socket_port = port
     cherrypy.tree.mount (Catalog_config(), '/', conf)
     cherrypy.engine.start()
     cherrypy.engine.block()
