@@ -22,12 +22,12 @@ if __name__ == "__main__":
     conf = json.load(open("conf.json", "r"))
 
     # Retrieving catalog URL to register to it
-    url = conf["catalog"]["URL"]
+    url = conf["catalog"]["URL"] + conf["catalog"]["registration"]["URI"]
     # Retrieving the payload expected by the catalog
-    payload = conf["catalog"]["expected_payload"]
+    payload = conf["catalog"]["registration"]["expected_payload"]
     # Retrieving the interval of time at which our actor should communicate
     # with the catalog
-    interval = conf["catalog"]["interval"]
+    interval = conf["catalog"]["registration"]["interval"]
     
     # Starting to send registration messages to catalog
     IamAlive(url, payload, interval)
@@ -37,9 +37,11 @@ if __name__ == "__main__":
         # and of a SE point, it will be composed of 4*4 Neighborhood and the
         # threshold of open umbrellas per neighborhood after which a rain
         # warning is sent is set to 2
+        topic = conf["catalog"]["registration"]["expected_payload"] \
+                    ["requirements"]["topics"][0]
         TurinManager = CityManager("Turin", 45.106234, 7.619275, 45.024758, 7.719869, 4, 2)
         TurinManager.manage()
-        TurinManager.myPyPPEMqttClient.mySubscribe("/Turin/+/notifications")
+        TurinManager.myPyPPEMqttClient.mySubscribe(topic)
 
         while True:
             time.sleep(1)

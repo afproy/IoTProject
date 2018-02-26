@@ -1,12 +1,30 @@
 {
     "catalog":
     {
-        "URL": "http://0.0.0.0:8080/iamalive",
-        "expected_payload":
+        "URL": "http://0.0.0.0:8080/",
+
+        "registration":
         {
-            "type": "service",
-            "serviceID": 10
+            "URI": "iamalive", 
+            "expected_payload":
+            {
+                "type": "service",
+                "serviceID": "tgram_pp",
+                "requirements":
+                {
+                    "access": "MQTT",
+                    "topics": ["/Turin/+/notifications"]
+                }
+
+            },
+            "interval": 120
         },
-        "interval": 3
+
+        "next_actor":
+        {
+            "URI": "next_actor?",
+            "params": ["type, ID"]
+        }
     }
+
 }
