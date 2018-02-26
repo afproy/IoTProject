@@ -5,10 +5,12 @@ from OurMQTT import OurMQTT
 
 class MyPublisher():
 
-    def __init__(self, clientID):
+    def __init__(self, clientID, broker, port):
         self.clientID = clientID
+        self.broker = broker
+        self.port = port
         #self.mqtt_client = OurMQTT(self.clientID, "iot.eclipse.org", 1883, self) 
-        self.mqtt_client = OurMQTT(self.clientID, "localhost", 1883, self) 
+        self.mqtt_client = OurMQTT(self.clientID, broker, port, self) 
         
 
     def start(self):

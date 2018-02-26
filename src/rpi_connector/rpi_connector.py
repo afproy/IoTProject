@@ -34,6 +34,7 @@ class PiServer():
             chatID = new_data_dict['chatID']
             print "chatID = %s" %chatID
 
+
         elif uri[0] == 'set_location':
             
             print "location = %s" %location
@@ -71,8 +72,9 @@ if __name__ == '__main__':
 
     file_conf.close()
 
-
-
+    topics = ["/Turin/+/notifications", "/Turin/+/sensors/temperature", "/Turin/+/sensors/humidity"]
+    
+    
     
     
     #IamAlive(url, payload, refresh_rate)
@@ -84,8 +86,8 @@ if __name__ == '__main__':
         print "i will start the thread"
         print "chatID = %s" %chatID
         print "location = %s" %location
-
-        PublishTH('localhost', 1883, 'test/rpi/pub',location, chatID )
+        
+        PublishTH('localhost', 1883, topics, location, chatID )
 
 
     
