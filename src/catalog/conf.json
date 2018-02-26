@@ -1,6 +1,6 @@
 {
-    "catalog": "test_device.json",
-    "time_to_live": 60,
+    "catalog": "catalog.json",
+    "time_to_live": 180,
     "host": "0.0.0.0",
     "port": 8080
 }

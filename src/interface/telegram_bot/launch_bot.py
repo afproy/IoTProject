@@ -9,13 +9,12 @@ Ctrl+'C' is pressed.
 
 from bot.BotManager import BotManager
 import time
-import requests
 import json
 import os, sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
                                             './../../catalog/')))
-from classes import IamAlive
+
 from util import *
 
 if __name__ == '__main__':
@@ -28,8 +27,6 @@ if __name__ == '__main__':
 
     # 2) Retrieve information regarding broker
     broker_host, broker_port = getBroker(conf)
-
-    # 3) Ask for information about next actor
 
     try:
         topic = conf["catalog"]["registration"]["expected_payload"] \

@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# -*- coding: utf-8 -*-
+
 """ Module providing utility functions to access catalog:
 
 - to register
@@ -30,3 +33,17 @@ def getBroker(conf):
     broker = json.loads(r.content.decode("utf-8", "ignore"))
 
     return broker["host"], broker["port"]
+
+def getNextActorRequirements(conf):
+    # Retrieving catalog URL to get information regarding broker
+    url = conf["catalog"]["URL"] + conf["catalog"]["next_actor"]["URI"]
+    # Request's params
+    params = conf["catalog"]["next_actor"]["params"]
+    # Request's header
+    headers = conf["catalog"]["next_actor"]["headers"]
+    # Making the request
+    r = requests.get(url, params=params, headers=headers)
+
+    requirements = json.loads(r.content.decode("utf-8", "ignore"))
+
+    return requirements

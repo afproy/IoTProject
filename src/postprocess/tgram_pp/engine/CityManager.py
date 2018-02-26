@@ -26,8 +26,8 @@ class CityManager:
         myCity (:obj: City): the City to manage
     """
 
-    def __init__(self, clientID, broker_host, broker_port, nwLat, nwLong, \
-                 seLat, seLong, n, threshold):
+    def __init__(self, clientID, broker_host, broker_port, next_act_req, \
+                 nwLat, nwLong, seLat, seLong, n, threshold):
         """ Constructor of CityManager:
 
         Initializes the attributes of the class. To do so it creates an instance
@@ -37,6 +37,7 @@ class CityManager:
             clientID (str): of the city to manage
             broker_host (str): broker's URL
             broker_port (int): broker's port
+            next_act_req (:obj: `dict` of str): requirements of the next actor
             nwLat (float): latitude of the North West point
             nwLong (float): longitude of the North West point
             seLat (float): latitude of the South East point
@@ -49,6 +50,13 @@ class CityManager:
         """
         logger.info("Initiating CityManager!")
         self.clientID = clientID
+        if next_act_req["access"] != "MQTT" or \
+           len(next_act_req["topics"]) != 1:
+            logger.error("Communication between postprocess engine and " \
+                         "next actor has changed. Assistance required!")
+        else:
+            self.next_act_topic = next_act_req["topics"][0]
+
         self.myPyPPEMqttClient = OurMQTT("TGramPPEngine", broker_host, \
                                          broker_port, self)
         self.myCity = City(self.clientID, nwLat, nwLong, seLat, seLong, n, \
@@ -139,7 +147,7 @@ class CityManager:
         """
         logger.info("CityManager sends notification to RainBot for user " \
                     "with chat_ID: %s!" % (str(user)))
-        topic = "/Turin/" + str(user.chat_ID) + "/rainbot"
+        topic = self.next_act_topic.replace("+", str(user.chat_ID))
         payload = {"chat_ID": user.chat_ID, "notify": True}
         self.myPyPPEMqttClient.myPublish(topic, json.dumps(payload))
 

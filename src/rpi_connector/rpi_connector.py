@@ -2,9 +2,11 @@ import os, sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './../mqtt/')))
 from OurMQTT import OurMQTT
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './../catalog/')))
-from classes import IamAlive
 #from MyPublisher import MyPublisher
 #from sensors import *
+
+from util import *
+
 from pubThread import *
 import cherrypy
 import json
@@ -34,6 +36,7 @@ class PiServer():
             chatID = new_data_dict['chatID']
             print "chatID = %s" %chatID
 
+
         elif uri[0] == 'set_location':
             
             print "location = %s" %location
@@ -47,32 +50,24 @@ class PiServer():
 
 if __name__ == '__main__':
 
-
-
-
-
-
-    # registration
-    # get next actor
-    # get broker
-
-
-
-
     file_conf=open('conf.json','r')
     rpi_conf=json.load(file_conf)
 
-    host = rpi_conf['payload']['requirements']['host']
-    port = rpi_conf['payload']['requirements']['port']
+    # registration
+    registration(rpi_conf)
+    # get next actor
+    # get broker
 
-    url = rpi_conf['catalog_url']
-    payload = rpi_conf['payload']
-    refresh_rate = rpi_conf['refresh_rate']
+    host = rpi_conf['catalog']['registration']['expected_payload']['requirements']['host']
+    port = rpi_conf['catalog']['registration']['expected_payload']['requirements']['port']
+
+    url = rpi_conf['catalog']['URL']
 
     file_conf.close()
 
-
-
+    topics = ["/Turin/+/notifications", "/Turin/+/sensors/temperature", "/Turin/+/sensors/humidity"]
+    
+    
     
     
     #IamAlive(url, payload, refresh_rate)
@@ -84,8 +79,8 @@ if __name__ == '__main__':
         print "i will start the thread"
         print "chatID = %s" %chatID
         print "location = %s" %location
-
-        PublishTH('localhost', 1883, 'test/rpi/pub',location, chatID )
+        
+        PublishTH('iot.eclipse.org', 1883, topics, location, chatID )
 
 
     

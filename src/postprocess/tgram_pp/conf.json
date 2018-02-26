@@ -22,8 +22,16 @@
 
         "next_actor":
         {
-            "URI": "next_actor?",
-            "params": ["type, ID"]
+            "URI": "next_actor",
+            "params":
+            {
+                "type": "interface",
+                "ID": "rainbot"
+            },
+            "headers":
+            {
+                "content-type": "application/json"
+            } 
         },
 
         "broker":
