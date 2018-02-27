@@ -2,16 +2,21 @@ import os, sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './../mqtt/')))
 from OurMQTT import OurMQTT
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './../catalog/')))
+from util import *
 #from MyPublisher import MyPublisher
 #from sensors import *
-
+import requests
 from pubThread import *
 import cherrypy
 import json
 import time
 
+
+
 chatID = None
 location = None
+
+
 
 class PiServer():
     exposed = True
@@ -48,27 +53,36 @@ class PiServer():
 
 if __name__ == '__main__':
 
-
-
-
-
-
-    # registration
-    # get next actor
-    # get broker
-
-
-
-
     file_conf=open('conf.json','r')
     rpi_conf=json.load(file_conf)
 
-    host = rpi_conf['catalog']['registration']['requirements']['host']
-    port = rpi_conf['catalog']['registration']['requirements']['port']
+    # registration
+    registration(rpi_conf)
 
-    url = rpi_conf['catalog']['url']
 
-    registration(file_conf)
+    # 2) Retrieve information regarding broker
+    #broker_host, broker_port = getBroker(file_conf)
+    broker_host = 'localhost'
+    broker_port = 1883
+    
+    # 3) Ask for information about next actor
+    # next_actor_requirements = getNextActorRequirements(file_conf)
+
+ 
+
+    next_actor_requirements = getNextActorRequirements(rpi_conf)
+
+    print next_actor_requirements
+
+
+
+ 
+
+
+    host = rpi_conf['catalog']['registration']['expected_payload']['requirements']['host']
+    port = rpi_conf['catalog']['registration']['expected_payload']['requirements']['port']
+
+    url = rpi_conf['catalog']['URL']
 
     file_conf.close()
 
@@ -87,7 +101,7 @@ if __name__ == '__main__':
         print "chatID = %s" %chatID
         print "location = %s" %location
         
-        PublishTH('localhost', 1883, topics, location, chatID )
+        PublishTH(broker_host, broker_port, topics, location, chatID )
 
 
     
