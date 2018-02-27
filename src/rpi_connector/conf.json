@@ -11,21 +11,38 @@
 					"access": "REST",
 					"host": "localhost",
 					"port": 8090,
-					"URI": [
+					"uri": [
 						"pair_chatID",
 						"set_location"
 					]
 				}
 
 			},
-            "interval": 120
-		}
-	},
+			"interval": 120
+		},
+		"next_actor": {
+			"URI": "next_actor",
+			"params": [{
 
-	"broker": {
-		"URI": "broker_info",
-		"headers": {
-		"content-type": "application/json"
+					"type": "service",
+					"ID": "tgram_pp"
+				},
+				{
+					"type": "service",
+					"ID": "ts_adaptor"
+				}
+			],
+			"headers": {
+				"content-type": "application/json"
+			}
+		},
+		"broker": {
+			"URI": "broker_info",
+			"headers": {
+				"content-type": "application/json"
+			}
 		}
+
 	}
+
 }

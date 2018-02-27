@@ -2,18 +2,21 @@ import os, sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './../mqtt/')))
 from OurMQTT import OurMQTT
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './../catalog/')))
+from util import *
 #from MyPublisher import MyPublisher
 #from sensors import *
-
-from util import *
-
+import requests
 from pubThread import *
 import cherrypy
 import json
 import time
 
+
+
 chatID = None
 location = None
+
+
 
 class PiServer():
     exposed = True
@@ -55,8 +58,26 @@ if __name__ == '__main__':
 
     # registration
     registration(rpi_conf)
-    # get next actor
-    # get broker
+
+
+    # 2) Retrieve information regarding broker
+    #broker_host, broker_port = getBroker(file_conf)
+    broker_host = 'localhost'
+    broker_port = 1883
+    
+    # 3) Ask for information about next actor
+    # next_actor_requirements = getNextActorRequirements(file_conf)
+
+ 
+
+    next_actor_requirements = getNextActorRequirements(rpi_conf)
+
+    print next_actor_requirements
+
+
+
+ 
+
 
     host = rpi_conf['catalog']['registration']['expected_payload']['requirements']['host']
     port = rpi_conf['catalog']['registration']['expected_payload']['requirements']['port']
@@ -80,7 +101,7 @@ if __name__ == '__main__':
         print "chatID = %s" %chatID
         print "location = %s" %location
         
-        PublishTH('iot.eclipse.org', 1883, topics, location, chatID )
+        PublishTH(broker_host, broker_port, topics, location, chatID )
 
 
     
