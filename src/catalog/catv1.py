@@ -6,6 +6,7 @@ import datetime
 
 from classes import *
 
+catalog_name = None
 
 
 class Catalog_manager():
@@ -21,10 +22,8 @@ class Catalog_manager():
     def __init__(self, file):
         '''
             Constructor of Catalog_manager:
-
             This method initialiaze the attributes 'broker' and 'port' by oppening the catalog.json
             file and takes from it the information about the broker IP-address and the port.
-
             Arguments:
                 file (file): the JSON file containing the content of the catalog 
         '''
@@ -58,12 +57,24 @@ class Catalog_config():
 
     def GET(self,*uri,**params):
         if not uri:
-            return open('catalog.json')
+            return open(catalog_name)
         if uri[0] == 'print_catalog':
             return Catalog_manager('catalog.json').print_catalog_WS()
-
-
-        
+        elif uri[0] == 'broker_info':
+            catalog = json.load(open('catalog.json', 'r'))
+            return json.dumps(catalog['broker'])
+        elif uri[0] == 'next_actor':
+            print("\n\n%s\n\n" % (params))
+            catalog = json.load(open('catalog.json', 'r'))
+            actors = catalog['actor']
+            print("\n\n%s\n\n" % (actors))
+            actors_of_right_type = actors[params["type"]]
+            for actor in actors_of_right_type:
+                if actor[params['type']+'ID'] == params['ID']:
+                    payload = {'status': 'success', 'requirements': actor['requirements']}
+                    print payload
+                    return json.dumps(payload)
+            return json.dumps({'status': 'failure'})
 
 
     def POST(self,*uri,**params):
@@ -74,7 +85,6 @@ class Catalog_config():
         body_payload = cherrypy.request.body.read()
         new_data_dict = json.loads(body_payload)
 
-        catalog_name = 'test_device.json'
         old_catalog = open(catalog_name, 'r').read()
         old_catalog_dict = json.loads(old_catalog)
 
@@ -145,4 +155,4 @@ if __name__ == '__main__':
     cherrypy.server.socket_port = port
     cherrypy.tree.mount (Catalog_config(), '/', conf)
     cherrypy.engine.start()
-    cherrypy.engine.block()
+cherrypy.engine.block()

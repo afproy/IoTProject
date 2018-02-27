@@ -1,0 +1,49 @@
+{
+    "broker": {
+        "host": "iot.eclipse.org", 
+        "port": 1883
+    }, 
+    "actor": {
+        "device": [
+            {
+                "requirements": {
+                    "access": "REST", 
+                    "host": "localhost", 
+                    "port": 8090, 
+                    "uri": [
+                        "pair_chatID", 
+                        "set_location"
+                    ]
+                }, 
+                "type": "device", 
+                "deviceID": "RPI_1", 
+                "last_update": "2018-02-27 22:40:33"
+            }
+        ], 
+        "interface": [], 
+        "service": [
+            {
+                "requirements": {
+                    "access": "MQTT", 
+                    "topics": [
+                        "/Turin/+/notifications"
+                    ]
+                }, 
+                "serviceID": "tgram_pp", 
+                "type": "service", 
+                "last_update": "2018-02-27 22:40:14"
+            }, 
+            {
+                "requirements": {
+                    "access": "MQTT", 
+                    "topics": [
+                        "/Turin/+/sensors/#"
+                    ]
+                }, 
+                "serviceID": "ts_adaptor", 
+                "type": "service", 
+                "last_update": "2018-02-27 22:40:14"
+            }
+        ]
+    }
+}
