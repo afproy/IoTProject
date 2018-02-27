@@ -4,31 +4,45 @@
         "port": 1883
     }, 
     "actor": {
-        "device": [], 
-        "interface": [
+        "device": [
             {
-                "interfaceID": "rainbot", 
-                "type": "interface", 
                 "requirements": {
-                    "access": "MQTT", 
-                    "topics": [
-                        "/Turin/+/rainbot"
+                    "access": "REST", 
+                    "host": "localhost", 
+                    "port": 8090, 
+                    "uri": [
+                        "pair_chatID", 
+                        "set_location"
                     ]
                 }, 
-                "last_update": "2018-02-26 21:18:41"
+                "type": "device", 
+                "deviceID": "RPI_1", 
+                "last_update": "2018-02-27 22:40:33"
             }
         ], 
+        "interface": [], 
         "service": [
             {
-                "type": "service", 
-                "serviceID": "tgram_pp", 
                 "requirements": {
                     "access": "MQTT", 
                     "topics": [
                         "/Turin/+/notifications"
                     ]
                 }, 
-                "last_update": "2018-02-26 21:18:44"
+                "serviceID": "tgram_pp", 
+                "type": "service", 
+                "last_update": "2018-02-27 22:40:14"
+            }, 
+            {
+                "requirements": {
+                    "access": "MQTT", 
+                    "topics": [
+                        "/Turin/+/sensors/#"
+                    ]
+                }, 
+                "serviceID": "ts_adaptor", 
+                "type": "service", 
+                "last_update": "2018-02-27 22:40:14"
             }
         ]
     }

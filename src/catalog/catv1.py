@@ -22,10 +22,8 @@ class Catalog_manager():
     def __init__(self, file):
         '''
             Constructor of Catalog_manager:
-
             This method initialiaze the attributes 'broker' and 'port' by oppening the catalog.json
             file and takes from it the information about the broker IP-address and the port.
-
             Arguments:
                 file (file): the JSON file containing the content of the catalog 
         '''
@@ -66,13 +64,17 @@ class Catalog_config():
             catalog = json.load(open('catalog.json', 'r'))
             return json.dumps(catalog['broker'])
         elif uri[0] == 'next_actor':
+            print("\n\n%s\n\n" % (params))
             catalog = json.load(open('catalog.json', 'r'))
             actors = catalog['actor']
-            actors_of_right_type = actors[params['type']]
+            print("\n\n%s\n\n" % (actors))
+            actors_of_right_type = actors[params["type"]]
             for actor in actors_of_right_type:
                 if actor[params['type']+'ID'] == params['ID']:
-                    return json.dumps(actor['requirements'])
-            raise cherrypy.HTTPError(404)
+                    payload = {'status': 'success', 'requirements': actor['requirements']}
+                    print payload
+                    return json.dumps(payload)
+            return json.dumps({'status': 'failure'})
 
 
     def POST(self,*uri,**params):
@@ -153,4 +155,4 @@ if __name__ == '__main__':
     cherrypy.server.socket_port = port
     cherrypy.tree.mount (Catalog_config(), '/', conf)
     cherrypy.engine.start()
-    cherrypy.engine.block()
+cherrypy.engine.block()
