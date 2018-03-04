@@ -65,18 +65,7 @@ if __name__ == '__main__':
     broker_host = 'localhost'
     broker_port = 1883
     
-    # 3) Ask for information about next actor
-    # next_actor_requirements = getNextActorRequirements(file_conf)
 
- 
-
-    next_actor_requirements = getNextActorRequirements(rpi_conf)
-
-    print next_actor_requirements
-
-
-
- 
 
 
     host = rpi_conf['catalog']['registration']['expected_payload']['requirements']['host']
@@ -86,7 +75,24 @@ if __name__ == '__main__':
 
     file_conf.close()
 
-    topics = ["/Turin/+/notifications", "/Turin/+/sensors/temperature", "/Turin/+/sensors/humidity"]
+
+    # 3) Ask for information about next actor
+    # next_actor_requirements = getNextActorRequirements(file_conf)
+
+ 
+
+    next_actor_requirements = getNextActorRequirements(rpi_conf)
+
+    print next_actor_requirements
+    print type(next_actor_requirements)
+
+    topics = []
+    for req in next_actor_requirements:
+        print next_actor_requirements[req]['topics']
+        topics.append(next_actor_requirements[req]['topics'])
+        #topics.append(req['topics'])
+        print topics
+    #topics = ["/Turin/+/notifications", "/Turin/+/sensors/temperature", "/Turin/+/sensors/humidity"]
     
     
     
@@ -118,6 +124,5 @@ if __name__ == '__main__':
     cherrypy.tree.mount (PiServer(), '/', conf)
     cherrypy.engine.start()
     cherrypy.engine.block()
-
 
 

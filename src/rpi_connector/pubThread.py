@@ -36,15 +36,17 @@ class PublishTH(threading.Thread):
         temperature_topic = ""
         humidity_topic = ""
         for topic in self.topics:
-            if topic.find('notifications') != -1:
-                topic = string.replace(topic, '+', str(self.chatID))
-                telegram_topic = topic
-            if topic.find('temperature') != -1:
-                topic = string.replace(topic, '+', str(self.chatID))
-                temperature_topic = topic
-            if topic.find('humidity') != -1:
-                topic = string.replace(topic, '+', str(self.chatID))
-                humidity_topic = topic
+            for item in topic:
+                if item.find('notifications') != -1:
+                    telegram_topic = string.replace(item, '+', str(self.chatID))
+                if item.find('sensors') != -1:
+                    item = string.replace(item, '+', str(self.chatID))
+                    temperature_topic = string.replace(item, '#', 'temperatue')
+                    humidity_topic = string.replace(item, '#', 'humidity')
+        
+        print temperature_topic
+        print humidity_topic
+        
         while True:
             
             payload_telegram = {}
@@ -53,7 +55,8 @@ class PublishTH(threading.Thread):
             payload_telegram['location']['latitude'] = self.location['latitude']
             payload_telegram['location']['longitude'] = self.location['longitude']
 
-
+            
+            # read the temperature and humidity, here it is simulated
             humidity, temperature = 10, 20
 
             payload_TH_temp = {}
@@ -88,8 +91,8 @@ class PublishTH(threading.Thread):
                 self.rpi_pub.mqtt_client.myPublish(temperature_topic, json.dumps(payload_TH_humi))
                 self.rpi_pub.mqtt_client.myPublish(humidity_topic, json.dumps(payload_TH_temp))
             elif x == 0:
-                print "waiting for button to be pressed"
-                payload_telegram['status'] = "open" # state of the button
+                print "waiting for button to be pressed and publish 'closed' status to telegram pp_engine"
+                payload_telegram['status'] = "closed" # state of the button
                 self.rpi_pub.mqtt_client.myPublish(telegram_topic, json.dumps(payload_telegram))
                 time.sleep(1)
             
