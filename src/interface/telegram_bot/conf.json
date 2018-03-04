@@ -24,10 +24,10 @@
         {
             "URI": "next_actor",
             "params":
-            {
+            [{
                 "type": "device",
                 "ID": "RPIi"
-            },
+            }],
             "headers":
             {
                 "content-type": "application/json"

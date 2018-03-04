@@ -54,18 +54,26 @@ class Umbrella:
         # Loading configuration file
         conf = json.load(open("conf.json", "r"))
 
-        conf["catalog"]["next_actor"]["params"]["ID"] = self.id
+        conf["catalog"]["next_actor"]["params"][0]["ID"] = self.id
 
+        next_actors = conf["catalog"]["next_actor"]["params"]
         req = getNextActorRequirements(conf)
 
-        if req["access"] != "REST" or len(req) != 4:
-            logger.error("Communication between postprocess engine and " \
-                         "next actor has changed. Assistance required!")
-            return
-        else:
-            self.rPIURL = "http://" + req["host"] + ":" + str(req["port"]) \
+        if (len(req) == len(next_actors)) and (next_actors[0]["ID"] in req):
+            
+            req = req[next_actors[0]["ID"]]
+
+            if req["access"] == "REST" and len(req) == 4:
+                self.rPIURL = "http://" + req["host"] + ":" + str(req["port"]) \
                           + "/"
-            self.rPIURI = req["URI"]
+                self.rPIURI = req["uri"]
+            else:
+                logger.error("Communication between RainBot and raspberry PI" \
+                             "has changed. Assistance required!")
+                return
+        else:
+            logger.error("Error while getting next_actor_requirements!")
+            
 
         logger.info("Sending POST request to the umbrella to pair "\
                     "umbrella_ID: %s to chat_ID: %s." % (self.id, chat_ID))
