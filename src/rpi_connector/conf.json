@@ -10,7 +10,7 @@
 				"requirements": {
 					"access": "REST",
 					"host": "localhost",
-					"port": 8090,
+					"port": 8091,
 					"uri": [
 						"pair_chatID",
 						"set_location"
