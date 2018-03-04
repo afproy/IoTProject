@@ -12,10 +12,17 @@ import requests
 import json
 import os, sys
 
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
                                             './../../catalog/')))
 
 from util import *
+import logging
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
 
@@ -29,7 +36,14 @@ if __name__ == "__main__":
     broker_host, broker_port = getBroker(conf)
 
     # 3) Ask for information about next actor
+    next_actors = conf["catalog"]["next_actor"]["params"]
     next_actor_requirements = getNextActorRequirements(conf)
+
+    if (len(next_actor_requirements) == len(next_actors)) and \
+       (next_actors[0]["ID"] in next_actor_requirements):
+        next_actor_requirements = next_actor_requirements[next_actors[0]["ID"]]
+    else:
+        logger.error("Error while getting next_actor_requirements!")
 
     try:
         # Creating a CityManager for turin with the coordinates of a NW point

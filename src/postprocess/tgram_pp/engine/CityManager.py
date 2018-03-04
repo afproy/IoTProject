@@ -53,7 +53,7 @@ class CityManager:
         if next_act_req["access"] != "MQTT" or \
            len(next_act_req["topics"]) != 1:
             logger.error("Communication between postprocess engine and " \
-                         "next actor has changed. Assistance required!")
+                         "RainBot has changed. Assistance required!")
         else:
             self.next_act_topic = next_act_req["topics"][0]
 
