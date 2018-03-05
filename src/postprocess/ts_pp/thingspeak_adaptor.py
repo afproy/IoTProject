@@ -2,6 +2,7 @@ import paho.mqtt.client as PahoMQTT
 import time
 import requests
 import sys, os
+import json
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
                                             './../../catalog/')))
@@ -29,8 +30,8 @@ class MySubscriber:
 			self._paho_mqtt.connect(self.broker_host, self.broker_port)
 			self._paho_mqtt.loop_start()
 
-			self._paho_mqtt.subscribe([(self.topics[0], 2), \
-									   (self.topics[1], 2)])
+			self._paho_mqtt.subscribe([(self.topics[0], 0), \
+									   (self.topics[1], 0)])
 
 		def stop (self):
 			self._paho_mqtt.unsubscribe(self.topics)
@@ -50,20 +51,37 @@ class MySubscriber:
 
 			topic = msg.topic.split("/")
 
+			
+			x = (msg.payload.decode("utf-8"))
+			print ("\n\n\n")
+			mydict = (json.loads(x))
+			value = float((mydict['value']))
+
+
 
 			if topic[-1] == str_temp[-1]:
-
+				
 				params = {
 					self.ts_params[0] : self.ts_writeapikey,
-					self.ts_params[2] : float(msg.payload)
+					self.ts_params[2] : value
 				}
+
+				print ("\n\n\n\n")
+				print (params)
+				print (value)               
 
 			elif topic[-1] == str_humi[-1]:
 
 				params = {
 					self.ts_params[0]: self.ts_writeapikey,
-					self.ts_params[1]: float(msg.payload)
+					self.ts_params[1]: value
 				}
+                
+				print ("\n\n\n\n")
+				print (params)
+				print (value)
+
+
 
 			result = requests.get(self.ts_url, params=params)
 
