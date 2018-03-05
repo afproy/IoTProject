@@ -70,16 +70,13 @@ class MySubscriber:
 
 
 if __name__ == "__main__":
-	# Loading configuration file
+	
 	conf = json.load(open("conf.json", "r"))
 
-	# 1) Perform registration to catalog by creating dedicated thread
 	registration(conf)
 
-	# 2) Retrieve information regarding broker
 	broker_host, broker_port = getBroker(conf)
 
-	# 3) Ask for information about next actor
 	ts = conf["thingspeak"]
 
 	topics = conf["catalog"]["registration"]["expected_payload"] \
