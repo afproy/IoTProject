@@ -61,11 +61,9 @@ if __name__ == '__main__':
 
 
     # 2) Retrieve information regarding broker
-    #broker_host, broker_port = getBroker(file_conf)
-    broker_host = 'localhost'
-    broker_port = 1883
-    
-
+    broker_host, broker_port = getBroker(rpi_conf)
+    #broker_host = 'localhost'
+    #broker_port = 1883
 
 
     host = rpi_conf['catalog']['registration']['expected_payload']['requirements']['host']

@@ -39,10 +39,15 @@ class PublishTH(threading.Thread):
             for item in topic:
                 if item.find('notifications') != -1:
                     telegram_topic = string.replace(item, '+', str(self.chatID))
-                if item.find('sensors') != -1:
+                
+                if item.find('temperature') != -1:
                     item = string.replace(item, '+', str(self.chatID))
-                    temperature_topic = string.replace(item, '#', 'temperatue')
-                    humidity_topic = string.replace(item, '#', 'humidity')
+                    temperature_topic = item
+
+                if item.find('humidity') != -1:
+                    item = string.replace(item, '+', str(self.chatID))
+                    humidity_topic = item
+
         
         print temperature_topic
         print humidity_topic
@@ -88,8 +93,8 @@ class PublishTH(threading.Thread):
                 self.rpi_pub.start()
                 time.sleep(0.1)
                 self.rpi_pub.mqtt_client.myPublish(telegram_topic, json.dumps(payload_telegram))
-                self.rpi_pub.mqtt_client.myPublish(temperature_topic, json.dumps(payload_TH_humi))
-                self.rpi_pub.mqtt_client.myPublish(humidity_topic, json.dumps(payload_TH_temp))
+                self.rpi_pub.mqtt_client.myPublish(temperature_topic, json.dumps(payload_TH_temp))
+                self.rpi_pub.mqtt_client.myPublish(humidity_topic, json.dumps(payload_TH_humi))
             elif x == 0:
                 print "waiting for button to be pressed and publish 'closed' status to telegram pp_engine"
                 payload_telegram['status'] = "closed" # state of the button
