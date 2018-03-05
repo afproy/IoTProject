@@ -6,14 +6,15 @@ It instantiates a BotManager, starts it, subscribes to the topic to which the
 associated Python postprocess engine will publish notifications and waits until
 Ctrl+'C' is pressed.
 """
-
+import os, sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
+                                            './../../catalog/')))
 from bot.BotManager import BotManager
 import time
 import json
-import os, sys
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), \
-                                            './../../catalog/')))
+
+
 
 from util import *
 
