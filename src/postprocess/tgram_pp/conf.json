@@ -24,10 +24,10 @@
         {
             "URI": "next_actor",
             "params":
-            {
+            [{
                 "type": "interface",
                 "ID": "rainbot"
-            },
+            }],
             "headers":
             {
                 "content-type": "application/json"

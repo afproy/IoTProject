@@ -41,13 +41,9 @@ def getNextActorRequirements(conf):
     params = []
     for req in conf["catalog"]['next_actor']['params']:
         params.append(req)
-    
-    print params  
-    print "\n\n\n"
 
     # Request's header     
     headers = conf['catalog']['next_actor']['headers']
-
 
     # Making the requests
     url = conf["catalog"]["URL"] + conf["catalog"]["next_actor"]["URI"]
@@ -65,5 +61,5 @@ def getNextActorRequirements(conf):
         elif response['status'] == 'failure':
             params.append(param)
             time.sleep(1)
-        
+    
     return requirements
