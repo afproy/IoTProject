@@ -1,10 +1,10 @@
 import threading
 import time
 from MyPublisher import MyPublisher
-#import rpi_connector
+
 import string
 import json
-#from sensors import *
+from sensors import *
 
 
 class PublishTH(threading.Thread):
@@ -58,7 +58,8 @@ class PublishTH(threading.Thread):
 
             
             # read the temperature and humidity, here it is simulated
-            humidity, temperature = 10, 20
+            # humidity, temperature = 10, 20
+            temperature, humidity = DHT11(17).read()
 
             payload_TH = {}
             payload_TH['temperature'] = {'value': temperature, 'unit':'C'}
@@ -75,20 +76,21 @@ class PublishTH(threading.Thread):
             print "-------------------"
 
             # simulating the reading of button 
-            x = int(raw_input("what is the button state? \n"))
-            time.sleep(1)
+            # x = int(raw_input("what is the button state? \n"))
+            x = Button(21).read()
+            time.sleep(0.1)
             
-            if x == 1:
-                print "Button pressed"
+            if x == "open":
+                print "Button pressed -> publish info to all actors"
                 payload_telegram['status'] = "open" # state of the button
                 print "publishing"
-
                 time.sleep(1)
                 self.rpi_pub.mqtt_client.myPublish(telegram_topic, json.dumps(payload_telegram))
                 time.sleep(1)
                 self.rpi_pub.mqtt_client.myPublish(thingspeak_topic, json.dumps(payload_TH))
           
-            elif x == 0:
+            elif x == "closed":
+                print "Button NOT pressed -> publish status to telegram pp engine"
                 print "publishing"
                 print "waiting for button to be pressed and publish 'closed' status to telegram pp_engine"
                 payload_telegram['status'] = "closed" # state of the button
