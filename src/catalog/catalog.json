@@ -1,0 +1,26 @@
+{
+    "broker": {
+        "host": "test.mosquitto.org", 
+        "port": 1883
+    }, 
+    "actor": {
+        "device": [
+            {
+                "type": "device", 
+                "requirements": {
+                    "access": "REST", 
+                    "host": "0.0.0.0", 
+                    "port": 8093, 
+                    "uri": [
+                        "pair_chatID", 
+                        "set_location"
+                    ]
+                }, 
+                "deviceID": "test", 
+                "last_update": "2018-03-06 19:50:53"
+            }
+        ], 
+        "interface": [], 
+        "service": []
+    }
+}

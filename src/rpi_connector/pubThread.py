@@ -33,29 +33,25 @@ class PublishTH(threading.Thread):
     def run(self):
         bFlagStart = False
         telegram_topic = ""
-        temperature_topic = ""
-        humidity_topic = ""
+        thingspeak_topic = ""
         for topic in self.topics:
             for item in topic:
                 if item.find('notifications') != -1:
                     telegram_topic = string.replace(item, '+', str(self.chatID))
                 
-                if item.find('temperature') != -1:
+                if item.find('sensors') != -1:
                     item = string.replace(item, '+', str(self.chatID))
-                    temperature_topic = item
+                    thingspeak_topic = string.replace(item, '#', 'thingspeak')
 
-                if item.find('humidity') != -1:
-                    item = string.replace(item, '+', str(self.chatID))
-                    humidity_topic = item
 
-        
-        print temperature_topic
-        print humidity_topic
+        print telegram_topic
+        print thingspeak_topic
+        self.rpi_pub.start()
         
         while True:
             
             payload_telegram = {}
-            payload_telegram['chatID'] = self.chatID
+            payload_telegram['chat_ID'] = self.chatID
             payload_telegram['location'] = {}
             payload_telegram['location']['latitude'] = self.location['latitude']
             payload_telegram['location']['longitude'] = self.location['longitude']
@@ -64,20 +60,14 @@ class PublishTH(threading.Thread):
             # read the temperature and humidity, here it is simulated
             humidity, temperature = 10, 20
 
-            payload_TH_temp = {}
-            payload_TH_temp['unit'] = 'C'
-            payload_TH_temp['type'] = 'temperature'
-            payload_TH_temp['value'] = temperature # reading temp from sensor
+            payload_TH = {}
+            payload_TH['temperature'] = {'value': temperature, 'unit':'C'}
+            payload_TH['humidity'] = {'value': humidity, 'unit':'%'}
         
-            payload_TH_humi = {}
-            payload_TH_humi['unit'] = '%'
-            payload_TH_humi['type'] = 'humidity'
-            payload_TH_humi['value'] = humidity # reading humi from sensor
-
 
             print payload_telegram
-            print payload_TH_temp
-            print payload_TH_humi
+            print payload_TH
+
 
             print "-------------------"
             print self.chatID
@@ -87,15 +77,19 @@ class PublishTH(threading.Thread):
             # simulating the reading of button 
             x = int(raw_input("what is the button state? \n"))
             time.sleep(1)
+            
             if x == 1:
+                print "Button pressed"
                 payload_telegram['status'] = "open" # state of the button
                 print "publishing"
-                self.rpi_pub.start()
-                time.sleep(0.1)
+
+                time.sleep(1)
                 self.rpi_pub.mqtt_client.myPublish(telegram_topic, json.dumps(payload_telegram))
-                self.rpi_pub.mqtt_client.myPublish(temperature_topic, json.dumps(payload_TH_temp))
-                self.rpi_pub.mqtt_client.myPublish(humidity_topic, json.dumps(payload_TH_humi))
+                time.sleep(1)
+                self.rpi_pub.mqtt_client.myPublish(thingspeak_topic, json.dumps(payload_TH))
+          
             elif x == 0:
+                print "publishing"
                 print "waiting for button to be pressed and publish 'closed' status to telegram pp_engine"
                 payload_telegram['status'] = "closed" # state of the button
                 self.rpi_pub.mqtt_client.myPublish(telegram_topic, json.dumps(payload_telegram))
