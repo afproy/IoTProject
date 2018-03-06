@@ -1,6 +1,6 @@
 from MyPublisher import MyPublisher
 import time
-import json
+import json 
 
 def openFirst16Umbrellas(mqtt_client, neighborhoods):
     for i in range(16):
