@@ -1,30 +1,56 @@
-import RPi.GPIO as GPIO
+import sys
 import Adafruit_DHT
 import time
+import RPi.GPIO as GPIO
 
+class Button():
 
-class Button:   
-    def init(self, pin):
+    def __init__(self, pin):
+        self.pin = pin
+        self.state = None
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        #GPIO.setup(21, GPIO.IN)
+        GPIO.setup(self.pin, GPIO.IN)
+
+    def read(self):
+        #initialize previous input as 0 => BUTTON NOT PRESSED
+        prev_input = 0        
         
+        # read pin
+        input = GPIO.input(self.pin)
+        # wait 0.05s to debounce the button
+        time.sleep(0.05)
+        
+        if input == 0:
+            self.state = 'closed'
+        elif input == 1:
+            self.state = 'open'
+        return self.state
+            
+
+class DHT11():
+
+    def __init__(self, pin):
+        self.pin = pin
+
     def read(self):
-        input_state = GPIO.input(self.pin)
-        if input_state == False:
-            print('Button Pressed')
-            time.sleep(0.2)
+        humidity, temperature = None, None
+        wait = 0
+        while (humidity == None or temperature == None and wait<100):
+            
+            humidity, temperature = Adafruit_DHT.read_retry(11,self.pin)
+            print "temperature = %s" %temperature
+            print "humidity = %s" %humidity
+            wait += 1
+   
+        prev_temp = temperature
+        prev_humi = humidity
+        return temperature, humidity
 
 
-class DHT11:
-    def init(self, pin1, pin2):
-        self.pin1 = pin1
-        self.pin2 = pin2 
-        self.temperature = None
-        self.humidity = None
-
-
-    def read(self):
-        while ((self.humidity == None) || (self.temperature == None)):
-            self.humidity, self.temperature = Adafruit_DHT.read_retry(self.pin1, self.pin2)
-        return self.humidity, self.temperature
-
+if __name__ == '__main__':
+    while True:
+        print "----------------"
+        print Button(21).read()
+        print DHT11(17).read()
+time.sleep(0.5)
