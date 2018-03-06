@@ -1,0 +1,69 @@
+{
+    "neighborhoods":
+    [
+        {
+            "latitude": 45.0960495,
+            "longitude": 7.63184925
+        },
+        {
+            "latitude": 45.0960495,
+            "longitude": 7.65699775
+        },
+        {
+            "latitude": 45.0960495, 
+            "longitude": 7.68214625
+        },
+        {
+            "latitude": 45.0960495,
+            "longitude": 7.70729475
+        },
+        {
+            "latitude": 45.0756805,
+            "longitude": 7.63184925
+        },
+        {
+            "latitude": 45.0756805,
+            "longitude": 7.65699775
+        },
+        {
+            "latitude": 45.0756805,
+            "longitude": 7.68214625
+        },
+        {
+            "latitude": 45.0756805,
+            "longitude": 7.70729475
+        },
+        {
+            "latitude": 45.0553115,
+            "longitude": 7.63184925
+        },
+        {
+            "latitude": 45.0553115,
+            "longitude": 7.65699775
+        },
+        {
+            "latitude": 45.0553115,
+            "longitude": 7.68214625
+        },
+        {
+            "latitude": 45.0553115,
+            "longitude": 7.70729475
+        },
+        {
+            "latitude": 45.0349425,
+            "longitude": 7.63184925
+        },
+        {
+            "latitude": 45.0349425,
+            "longitude": 7.65699775
+        },
+        {
+            "latitude": 45.0349425,
+            "longitude": 7.68214625
+        },
+        {
+            "latitude": 45.0349425,
+            "longitude": 7.70729475
+        }
+    ]
+}
