@@ -4,7 +4,7 @@ from MyPublisher import MyPublisher
 
 import string
 import json
-from sensors import *
+#from sensors import *
 
 
 class PublishTH(threading.Thread):
@@ -58,8 +58,8 @@ class PublishTH(threading.Thread):
 
             
             # read the temperature and humidity, here it is simulated
-            # humidity, temperature = 10, 20
-            temperature, humidity = DHT11(17).read()
+            humidity, temperature = 10, 20
+            #temperature, humidity = DHT11(17).read()
 
             payload_TH = {}
             payload_TH['temperature'] = {'value': temperature, 'unit':'C'}
@@ -76,11 +76,11 @@ class PublishTH(threading.Thread):
             print "-------------------"
 
             # simulating the reading of button 
-            # x = int(raw_input("what is the button state? \n"))
-            x = Button(21).read()
+            x = int(raw_input("what is the button state? \n"))
+            # x = Button(21).read()
             time.sleep(0.1)
             
-            if x == "open":
+            if x == 1:
                 print "Button pressed -> publish info to all actors"
                 payload_telegram['status'] = "open" # state of the button
                 print "publishing"
@@ -89,7 +89,7 @@ class PublishTH(threading.Thread):
                 time.sleep(1)
                 self.rpi_pub.mqtt_client.myPublish(thingspeak_topic, json.dumps(payload_TH))
           
-            elif x == "closed":
+            elif x == 0:
                 print "Button NOT pressed -> publish status to telegram pp engine"
                 print "publishing"
                 print "waiting for button to be pressed and publish 'closed' status to telegram pp_engine"
