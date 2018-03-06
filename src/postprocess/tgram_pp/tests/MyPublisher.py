@@ -7,7 +7,7 @@ class MyPublisher():
 
     def __init__(self, clientID):
         self.clientID = clientID
-        self.mqtt_client = OurMQTT(self.clientID, "iot.eclipse.org", 1883, \
+        self.mqtt_client = OurMQTT(self.clientID, "test.mosquitto.org", 1883, \
                                     self) 
         
 

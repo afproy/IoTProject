@@ -13,7 +13,7 @@
                 "requirements":
                 {
                     "access": "MQTT",
-                    "topics": ["/Turin/+/sensors/temperature", "/Turin/+/sensors/humidity"]
+                    "topics": ["/Turin/+/sensors/#"]
                 }
 
             },
@@ -35,6 +35,7 @@
   {
       "URL": "https://api.thingspeak.com/update.json",
       "writeapikey": "TET7BW0DX9KFMYZP",
-      "params": ["api_key","field1","field2"]
+      "fields": ["field1","field2"],
+      "channel_id": 426828
   }
 }
