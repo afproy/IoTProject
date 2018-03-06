@@ -6,7 +6,7 @@ TemperatureFieldID = 3;
 readAPIKey = 'SGKWWOM1FXPZ4OFL'; 
 
 temp = thingSpeakRead(readChannelID,'Fields',TemperatureFieldID,...
-'DateRange', [datetime('Jan 31, 2018'),datetime('Mar 1, 2018')], 'ReadKey',readAPIKey); 
+'DateRange', [datetime('Jan 31, 2018'),datetime('Jan 31, 2019')], 'ReadKey',readAPIKey); 
 
 figure,
 histogram(temp); 
