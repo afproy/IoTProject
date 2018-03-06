@@ -1,0 +1,48 @@
+{
+	"catalog": {
+		"URL": "http://192.168.1.12:8080/",
+
+		"registration": {
+			"URI": "iamalive",
+			"expected_payload": {
+				"type": "device",
+				"deviceID": "RPI_1",
+				"requirements": {
+					"access": "REST",
+					"host": "192.168.1.12",
+					"port": 8093,
+					"uri": [
+						"pair_chatID",
+						"set_location"
+					]
+				}
+
+			},
+			"interval": 120
+		},
+		"next_actor": {
+			"URI": "next_actor",
+			"params": [{
+
+					"type": "service",
+					"ID": "tgram_pp"
+				},
+				{
+					"type": "service",
+					"ID": "ts_adaptor"
+				}
+			],
+			"headers": {
+				"content-type": "application/json"
+			}
+		},
+		"broker": {
+			"URI": "broker_info",
+			"headers": {
+				"content-type": "application/json"
+			}
+		}
+
+	}
+
+}

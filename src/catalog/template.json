@@ -1,0 +1,15 @@
+{
+	"actor": {
+		"device": [{
+			}
+	    ],
+
+		"service": [{
+				}
+        ],
+        
+		"interface": [{
+        }
+    ]
+	}
+}

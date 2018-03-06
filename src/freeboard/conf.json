@@ -1,0 +1,36 @@
+{
+    "catalog":    {
+        "URL": "http://192.168.1.12:8080/",
+
+        "registration":
+        {
+            "URI": "iamalive", 
+            "expected_payload":
+            {
+                "type": "interface",
+                "interfaceID": "freeboard",
+                "requirements":
+                {
+                    "access": "REST",
+                    "host": "192.168.1.5",
+                    "port": 8088,
+                    "uri": [
+                        "index.html"
+                    ]
+                }
+
+            },
+            "interval": 120
+        },
+
+
+        "broker":
+        {
+            "URI": "broker_info",
+            "headers":
+            {
+                "content-type": "application/json"
+            }  
+        }
+    }
+}

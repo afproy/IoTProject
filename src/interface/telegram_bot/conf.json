@@ -1,0 +1,46 @@
+{
+    "catalog":
+    {
+        "URL": "http://192.168.1.12:8080/",
+
+        "registration":
+        {
+            "URI": "iamalive", 
+            "expected_payload":
+            {
+                "type": "interface",
+                "interfaceID": "rainbot",
+                "requirements":
+                {
+                    "access": "MQTT",
+                    "topics": ["/Turin/+/rainbot"]
+                }
+
+            },
+            "interval": 120
+        },
+
+        "next_actor":
+        {
+            "URI": "next_actor",
+            "params":
+            [{
+                "type": "device",
+                "ID": "RPIi"
+            }],
+            "headers":
+            {
+                "content-type": "application/json"
+            } 
+        },
+
+        "broker":
+        {
+            "URI": "broker_info",
+            "headers":
+            {
+                "content-type": "application/json"
+            }  
+        }
+    }
+}

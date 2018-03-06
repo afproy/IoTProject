@@ -1,0 +1,23 @@
+{
+    "broker": {
+        "host": "iot.eclipse.org", 
+        "port": 1883
+    }, 
+    "actor": {
+        "device": [], 
+        "interface": [
+            {
+                "interfaceID": "rainbot", 
+                "requirements": {
+                    "access": "MQTT", 
+                    "topics": [
+                        "/Turin/+/rainbot"
+                    ]
+                }, 
+                "type": "interface", 
+                "last_update": "2018-02-26 20:46:45"
+            }
+        ], 
+        "service": []
+    }
+}

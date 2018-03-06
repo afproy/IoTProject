@@ -1,0 +1,60 @@
+{
+    "catalog":
+    {
+        "URL": "http://192.168.1.12:8080/",
+
+        "registration":
+        {
+            "URI": "iamalive", 
+            "expected_payload":
+            {
+                "type": "service",
+                "serviceID": "tgram_pp",
+                "requirements":
+                {
+                    "access": "MQTT",
+                    "topics": ["/Turin/+/notifications"]
+                }
+
+            },
+            "interval": 120
+        },
+
+        "next_actor":
+        {
+            "URI": "next_actor",
+            "params":
+            [{
+                "type": "interface",
+                "ID": "rainbot"
+            }],
+            "headers":
+            {
+                "content-type": "application/json"
+            } 
+        },
+
+        "broker":
+        {
+            "URI": "broker_info",
+            "headers":
+            {
+                "content-type": "application/json"
+            }  
+        }
+    },
+
+    "CityManager":
+    {
+        "name": "Turin",
+        "coordinates":
+        {
+            "nwLat": 45.106234,
+            "nwLong": 7.619275,
+            "seLat": 45.024758,
+            "seLong": 7.719869
+        },
+        "n": 4,
+        "threshold": 2
+    }
+}

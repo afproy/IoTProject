@@ -1,0 +1,110 @@
+{
+	"version": 1,
+	"allow_edit": true,
+	"plugins": [],
+	"panes": [
+		{
+			"title": "field1",
+			"width": 1,
+			"row": {
+				"3": 1
+			},
+			"col": {
+				"3": 1
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "text_widget",
+					"settings": {
+						"title": "Temperature",
+						"size": "regular",
+						"value": "datasources[\"ThingSpeak\"][\"feeds\"][0][\"field2\"]",
+						"animate": true,
+						"units": "C"
+					}
+				}
+			]
+		},
+		{
+			"title": "Temperature",
+			"width": 1,
+			"row": {
+				"3": 1
+			},
+			"col": {
+				"3": 2
+			},
+			"col_width": 2,
+			"widgets": [
+				{
+					"type": "html",
+					"settings": {
+						"html": "<iframe width=\"450\" height=\"260\" style=\"border: 1px solid #cccccc;\" src=\"https://thingspeak.com/channels/426828/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15\"></iframe>",
+						"height": 5
+					}
+				}
+			]
+		},
+		{
+			"title": "field2",
+			"width": 1,
+			"row": {
+				"3": 5,
+				"4": 5
+			},
+			"col": {
+				"3": 1,
+				"4": 1
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "gauge",
+					"settings": {
+						"title": "Humidity",
+						"value": "datasources[\"ThingSpeak\"][\"feeds\"][0][\"field1\"]",
+						"units": "%",
+						"min_value": 0,
+						"max_value": 100
+					}
+				}
+			]
+		},
+		{
+			"title": "Humidity",
+			"width": 1,
+			"row": {
+				"3": 13,
+				"4": 13
+			},
+			"col": {
+				"3": 2,
+				"4": 2
+			},
+			"col_width": 2,
+			"widgets": [
+				{
+					"type": "html",
+					"settings": {
+						"html": "<iframe width=\"450\" height=\"260\" style=\"border: 1px solid #cccccc;\" src=\"https://thingspeak.com/channels/426828/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Humidity+Raw+Data&type=line\"></iframe>",
+						"height": 4
+					}
+				}
+			]
+		}
+	],
+	"datasources": [
+		{
+			"name": "ThingSpeak",
+			"type": "JSON",
+			"settings": {
+				"url": "https://api.thingspeak.com/channels/426828/feeds.json?api_key=SGKWWOM1FXPZ4OFL&results=2",
+				"use_thingproxy": true,
+				"refresh": 5,
+				"method": "GET"
+			}
+		}
+	],
+	"columns": 3
+}

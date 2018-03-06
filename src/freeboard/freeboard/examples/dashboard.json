@@ -1,0 +1,77 @@
+{
+	"version": 1,
+	"allow_edit": true,
+	"plugins": [],
+	"panes": [
+		{
+			"title": "Mqtt",
+			"width": 1,
+			"row": {
+				"3": 1
+			},
+			"col": {
+				"3": 1
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "text_widget",
+					"settings": {
+						"title": "Temperature",
+						"size": "regular",
+						"value": "datasources[\"Mqtt\"][\"temp\"]",
+						"animate": true,
+						"units": "C"
+					}
+				}
+			]
+		},
+		{
+			"title": "rest",
+			"width": 1,
+			"row": {
+				"3": 5
+			},
+			"col": {
+				"3": 1
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "text_widget",
+					"settings": {
+						"title": "Temperature",
+						"size": "regular",
+						"value": "datasources[\"rest\"][\"temp\"]",
+						"sparkline": false,
+						"animate": true,
+						"units": "C"
+					}
+				}
+			]
+		}
+	],
+	"datasources": [
+		{
+			"name": "rest",
+			"type": "JSON",
+			"settings": {
+				"url": "http://0.0.0.0:8080/",
+				"use_thingproxy": false,
+				"refresh": 5,
+				"method": "GET"
+			}
+		},
+		{
+			"name": "Mqtt",
+			"type": "paho_mqtt_js",
+			"settings": {
+				"server": "127.0.0.1",
+				"port": 1883,
+				"client_id": "sasa",
+				"topics": "topic1/temp"
+			}
+		}
+	],
+	"columns": 3
+}
