@@ -6,7 +6,7 @@ readAPIKey = 'SGKWWOM1FXPZ4OFL';
 
    
 humi = thingSpeakRead(readChannelID,'Fields',HumidityFieldID,...
-'DateRange', [datetime('Jan 31, 2018'),datetime('Mar 1, 2018')], 'ReadKey',readAPIKey); 
+'DateRange', [datetime('Jan 31, 2018'),datetime('Jan 31, 2019')], 'ReadKey',readAPIKey); 
    
 histogram(humi); 
 xlabel('Humidity (%)'); 
